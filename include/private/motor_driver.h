@@ -9,9 +9,8 @@
 
 #include <pico/stdlib.h>
 
-extern const uint COIL_1;
-extern const uint COIL_2;
-extern const uint COIL_3;
-extern const uint COIL_4;
-
-void vStepClockwise();
+void vMotorInit();
+void vMotorReset();
+void vMotorClockwise();
+void vMotorCounterclockwise();
+void vMotorAlternate();
