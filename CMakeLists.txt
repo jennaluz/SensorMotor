@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 set(PICO_BOARD adafruit_feather_rp2040)
 include(pico_sdk_import.cmake)
 
-project(TempHmdMotor VERSION 1.0.0)
+project(TempHmdMotor VERSION 1.0.0 LANGUAGES C CXX ASM)
 
 pico_sdk_init()
 

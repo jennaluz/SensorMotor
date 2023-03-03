@@ -22,7 +22,8 @@ int main()
     gpio_set_dir(COIL_3, GPIO_OUT);
     gpio_set_dir(COIL_4, GPIO_OUT);
 
-    while (true) {
+    int i = 0;
+    for (i = 0; i < 500; i++) {
         vStepClockwise();
     }
 }

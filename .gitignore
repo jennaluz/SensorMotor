@@ -1,3 +1,5 @@
 # ignore these patterns
 
+# directories
 notes/
+build/
