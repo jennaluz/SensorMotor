@@ -1,5 +1,5 @@
 /*
- * TempHmdMotor/include/private/motor_driver.h
+ * SensorMotor/include/private/motor_driver.h
  *
  * Defines GPIO pins used for stepper motor.
  * Defines API functions for stepper motor.

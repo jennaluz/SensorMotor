@@ -1,14 +1,14 @@
 /*
- * TempHmdMotor/source/motor_driver.c
+ * SensorMotor/source/motor_driver.c
  */
 
 #include "motor_driver.h"
 
-const uint COIL_1 = 12;
-const uint COIL_2 = 13;
-const uint COIL_3 = 6;
-const uint COIL_4 = 0;
-const uint REV_STEPS = 525; // revolutions per step
+const uint COIL_1       = 12;
+const uint COIL_2       = 13;
+const uint COIL_3       = 6;
+const uint COIL_4       = 0;
+const uint REV_STEPS    = 525; // revolutions per step
 
 void vMotorInit()
 {

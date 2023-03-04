@@ -1,10 +1,11 @@
 /*
- * TempHmdMotor/source/main.c
+ * SensorMotor/source/main.c
  */
 
 #include <pico/stdlib.h>
 #include <stdio.h>
 
+#include "hdc1080_driver.h"
 #include "motor_driver.h"
 
 int main()
@@ -12,9 +13,11 @@ int main()
     stdio_init_all();
 
     // initialize stepper motor gpio pins
-    vMotorInit();
+    //vMotorInit();
+    vHDC1080Init();
 
     while (true) {
-        vMotorAlternate();
+        vHDC1080ReadTmp();
+        sleep_ms(100);
     }
 }
