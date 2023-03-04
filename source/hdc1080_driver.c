@@ -81,4 +81,6 @@ void vHDC1080ReadHmd()
   // convert return value to relative humidity
   fRelativeHumdity = (uiReturnValue / pow(2, 16)) * 100;
   //printf("RH %f\n", fRelativeHumdity);
+
+  return;
 }

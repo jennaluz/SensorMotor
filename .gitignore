@@ -3,3 +3,4 @@
 # directories
 notes/
 build/
+.cache/clangd/index
