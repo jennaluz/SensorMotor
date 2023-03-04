@@ -17,7 +17,8 @@ int main()
     vHDC1080Init();
 
     while (true) {
-        vHDC1080ReadTmp();
+        //vHDC1080ReadTmp();
+        vHDC1080ReadHmd();
         sleep_ms(100);
     }
 }
