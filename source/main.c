@@ -13,11 +13,11 @@ int main()
     stdio_init_all();
 
     // initialize stepper motor gpio pins
-    //vMotorInit();
+    vMotorInit();
     vHDC1080Init();
 
     while (true) {
-        //vHDC1080ReadTmp();
+        vHDC1080ReadTmp();
         vHDC1080ReadHmd();
         sleep_ms(100);
     }
