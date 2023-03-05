@@ -18,6 +18,7 @@
 #include <stdio.h>
 
 #include "button.h"
+#include "motor.h"
 
 
 SemaphoreHandle_t xButton1Semaphore = NULL;
@@ -69,7 +70,7 @@ void vButtonCallback(uint gpio, uint32_t events)
  * Blocks on xButtono1Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void vButton1()
+void vButton1Handler()
 {
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;
@@ -103,11 +104,13 @@ void vButton1()
 /*
  * Blocks on xButtono2Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
+ * Changes the status of the Stepper Motor based on the button input.
  */
-void vButton2()
+void vButton2Handler()
 {
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;
+    motor_status_e eMotorStatus = MOTOR_CLOCKWISE;
 
     while (true) {
         xSemaphoreTake(xButton2Semaphore, portMAX_DELAY);
@@ -127,7 +130,28 @@ void vButton2()
             }
         }
 
-        printf("Button 2 was pushed %d time(s).\n", uiPushes);
+        // make decision based on count of pushes
+        switch (uiPushes) {
+            case 1:
+                eMotorStatus = MOTOR_CLOCKWISE;
+                xQueueSend(xMotorQueue, &eMotorStatus, 0);
+                printf("Continuously move stepper motor clockwise\n");
+                break;
+            case 2:
+                eMotorStatus = MOTOR_COUNTERCLOCKWISE;
+                xQueueSend(xMotorQueue, &eMotorStatus, 0);
+                printf("Continuously move stepper motor counterclockwise\n");
+                break;
+            case 3:
+                eMotorStatus = MOTOR_ALTERNATE;
+                xQueueSend(xMotorQueue, &eMotorStatus, 0);
+                printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
+
+        //printf("Button 2 was pushed %d time(s).\n", uiPushes);
 
         // reset pushes counter
         uiPushes = 0;
@@ -139,7 +163,7 @@ void vButton2()
  * Blocks on xButtono3Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void vButton3()
+void vButton3Handler()
 {
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;

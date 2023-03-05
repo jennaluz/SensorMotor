@@ -1,5 +1,5 @@
 /*
- * SensorMotor/include/private/hdc1080_driver.h
+ * SensorMotor/include/private/sensor_driver.h
  *
  * Initializes I2C port and connects to HDC1080.
  * Reads in temperature and humidity from the HDC1080.
@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "hdc1080_driver.h"
+#include "sensor_driver.h"
 
 
 const uint8_t HDC_ADDR          = 0x40;
@@ -25,7 +25,7 @@ const uint8_t HDC_CONFIG_REG    = 0x02;
 /*
  * Initialize I2C port, and SDA and SCL pins.
  */
-void vHDC1080Init()
+void vSensorInit()
 {
     // initialize default port on default SDA and SCL pins
     i2c_init(PICO_DEFAULT_I2C_INSTANCE, 100 * 1000);    // put I2C hardware into known state and enable
@@ -41,7 +41,7 @@ void vHDC1080Init()
  * Reads in the HDC1080 temperature register.
  * Converts value into degrees fahrenheit.
  */
-void vHDC1080ReadTmp()
+void vSensorReadTmp()
 {
     uint8_t uiTmpValue[2] = {};
     int8_t iReturn = 0;
@@ -66,7 +66,7 @@ void vHDC1080ReadTmp()
  * Reads in the HDC1080 humidity register.
  * Converts value into relative humditiy.
  */
-void vHDC1080ReadHmd()
+void vSensorReadHmd()
 {
     uint8_t uiHmdValue[2] = {};
     int8_t iReturn = 0;

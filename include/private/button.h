@@ -6,6 +6,7 @@
  * Uses a callback function and semaphores to handle button input.
  */
 
+
 #pragma once
 
 
@@ -17,8 +18,9 @@ extern SemaphoreHandle_t xButton1Semaphore;
 extern SemaphoreHandle_t xButton2Semaphore;
 extern SemaphoreHandle_t xButton3Semaphore;
 
+
 void vButtonIRQInit();
 void vButtonCallback();
-void vButton1();
-void vButton2();
-void vButton3();
+void vButton1Handler();
+void vButton2Handler();
+void vButton3Handler();
