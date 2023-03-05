@@ -1,13 +1,15 @@
 /*
  * SensorMotor/include/private/motor_driver.h
  *
- * Defines GPIO pins used for stepper motor.
- * Defines API functions for stepper motor.
+ * Initializes Stepper Motor GPIO pins.
+ * Defines API functions to move stepper motor.
  */
 
 #pragma once
 
+
 #include <pico/stdlib.h>
+
 
 void vMotorInit();
 void vMotorReset();

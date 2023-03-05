@@ -1,6 +1,6 @@
 # ignore these patterns
-
 # directories
 notes/
+test/
 build/
-.cache/clangd/index
+.cache/clangd/index/

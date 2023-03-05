@@ -2,7 +2,9 @@
  * SensorMotor/source/motor_driver.c
  */
 
+
 #include "motor_driver.h"
+
 
 const uint COIL_1       = 12;
 const uint COIL_2       = 13;
@@ -10,6 +12,10 @@ const uint COIL_3       = 6;
 const uint COIL_4       = 0;
 const uint REV_STEPS    = 525; // revolutions per step
 
+
+/*
+ * Initializes all GPIO pins for the Stepper Motor.
+ */
 void vMotorInit()
 {
     gpio_init(COIL_1);
@@ -34,8 +40,6 @@ void vMotorReset()
     gpio_put(COIL_2, 0);
     gpio_put(COIL_3, 0);
     gpio_put(COIL_4, 0);
-
-    return;
 }
 
 /*
@@ -61,8 +65,6 @@ void vMotorClockwise()
     gpio_put(COIL_2, 0);    // 1000
     sleep_ms(1);
     gpio_put(COIL_4, 1);    // 1001
-
-    return;
 }
 
 /*
@@ -89,8 +91,6 @@ void vMotorCounterclockwise()
     gpio_put(COIL_4, 1);    // 0011
     sleep_ms(1);
     gpio_put(COIL_3, 0);    // 0011
-
-    return;
 }
 
 /*
