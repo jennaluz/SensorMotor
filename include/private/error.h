@@ -13,6 +13,4 @@ typedef enum error_code_e {
 } error_code_e;
 
 
-void vErrorUnknownInput();
-void vErrorOverflow();
-void vErrorEmergencyStop();
+void vError(error_code_e eError);

@@ -49,8 +49,7 @@ void vMotorHandler()
             case MOTOR_STATUS:
                 break;
             default:
-                //printf("Error");
-                vErrorUnknownInput();
+                vError(ERROR_UNKNOWN_INPUT);
         }
     }
 }

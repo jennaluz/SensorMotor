@@ -33,9 +33,11 @@ add_executable(
     ${CMAKE_PROJECT_NAME}
     source/main.c
     source/button.c
+    source/display.c
     source/display_driver.c
-    source/motor_driver.c
+    source/error.c
     source/motor.c
+    source/motor_driver.c
     source/sensor_driver.c
     )
 
