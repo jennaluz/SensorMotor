@@ -11,6 +11,7 @@
 #include <pico/stdlib.h>
 #include <stdio.h>
 
+#include "error.h"
 #include "motor.h"
 #include "motor_driver.h"
 
@@ -24,10 +25,11 @@ QueueHandle_t xMotorQueue = NULL;
  */
 void vMotorHandler()
 {
-    motor_status_e eStatus = MOTOR_CLOCKWISE;
+    motor_code_e eCode = MOTOR_CLOCKWISE;
+    motor_code_e eStatus = eCode;
 
     while (true) {
-        xQueueReceive(xMotorQueue, &eStatus, 0);
+        xQueueReceive(xMotorQueue, &eCode, 0);
 
         switch (eStatus) {
             case MOTOR_CLOCKWISE:
@@ -39,8 +41,16 @@ void vMotorHandler()
             case MOTOR_ALTERNATE:
                 vMotorAlternate();
                 break;
+            case MOTOR_TEMPERATURE:
+            case MOTOR_HUMIDITY:
+                break;
+            case MOTOR_HALT:
+                break;
+            case MOTOR_STATUS:
+                break;
             default:
-                printf("Error");
+                //printf("Error");
+                vErrorUnknownInput();
         }
     }
 }
