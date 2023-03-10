@@ -40,7 +40,7 @@ void vMotorHandler()
     }
 
     while (true) {
-        xQueueReceive(xMotorQueue, &eMotorCode, 0);
+        xQueuePeek(xMotorQueue, &eMotorCode, 0);
 
         switch (eMotorCode) {
             case MOTOR_CLOCKWISE:

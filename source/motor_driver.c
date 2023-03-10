@@ -5,6 +5,9 @@
  */
 
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 #include <pico/stdlib.h>
 
 #include "motor_driver.h"
@@ -56,19 +59,19 @@ void vMotorClockwise()
     vMotorReset();
 
     gpio_put(COIL_4, 1);    // 0001
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_3, 1);    // 0011
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_4, 0);    // 0010
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_2, 1);    // 0110
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_3, 0);    // 0100
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_1, 1);    // 1100
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_2, 0);    // 1000
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_4, 1);    // 1001
 }
 
@@ -82,19 +85,19 @@ void vMotorCounterclockwise()
 
     gpio_put(COIL_4, 1);
     gpio_put(COIL_1, 1);    // 1001
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_4, 0);    // 1000
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_2, 1);    // 1100
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_1, 0);    // 0100
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_3, 1);    // 0110
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_2, 0);    // 0010
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_4, 1);    // 0011
-    sleep_ms(1);
+    vTaskDelay(1);
     gpio_put(COIL_3, 0);    // 0011
 }
 
