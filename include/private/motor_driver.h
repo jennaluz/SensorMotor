@@ -17,3 +17,6 @@ void vMotorReset();
 void vMotorClockwise();
 void vMotorCounterclockwise();
 void vMotorAlternate();
+void vMotorHalt();
+void vMotorIncrement();
+void vMotorDecrement();

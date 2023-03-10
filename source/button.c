@@ -18,7 +18,9 @@
 #include <stdio.h>
 
 #include "button.h"
+#include "system_code.h"
 #include "motor.h"
+#include "sensor.h"
 
 
 SemaphoreHandle_t xButton1Semaphore = NULL;
@@ -74,6 +76,8 @@ void vButton1Handler()
 {
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;
+    sensor_base_e eSensorBase = DECIMAL;
+    system_code_e eMotorCode = MOTOR_TEMPERATURE;
 
     while (true) {
         xSemaphoreTake(xButton1Semaphore, portMAX_DELAY);
@@ -93,7 +97,33 @@ void vButton1Handler()
             }
         }
 
-        printf("Button 1 was pushed %d time(s).\n", uiPushes);
+        //printf("Button 1 was pushed %d time(s).\n", uiPushes);
+        switch (uiPushes) {
+            case 1:
+                eMotorCode = MOTOR_TEMPERATURE;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                //printf("Move stepper motor on temperature\n");
+                break;
+            case 2:
+                eMotorCode = MOTOR_HUMIDITY;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                //printf("Move stepper motor on humidity\n");
+                break;
+            case 3:
+                if (eSensorBase == DECIMAL) {
+                    eSensorBase = HEXADECIMAL;
+                } else {
+                    eSensorBase = DECIMAL;
+                }
+                break;
+            case 4:
+                eMotorCode = MOTOR_HALT;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                printf("Emergency stop stepper motor\n");
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
 
         // reset pushes counter
         uiPushes = 0;
@@ -110,7 +140,7 @@ void vButton2Handler()
 {
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;
-    motor_status_e eMotorStatus = MOTOR_CLOCKWISE;
+    system_code_e eMotorCode = MOTOR_CLOCKWISE;
 
     while (true) {
         xSemaphoreTake(xButton2Semaphore, portMAX_DELAY);
@@ -133,19 +163,19 @@ void vButton2Handler()
         // make decision based on count of pushes
         switch (uiPushes) {
             case 1:
-                eMotorStatus = MOTOR_CLOCKWISE;
-                xQueueSend(xMotorQueue, &eMotorStatus, 0);
-                printf("Continuously move stepper motor clockwise\n");
+                eMotorCode = MOTOR_CLOCKWISE;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                //printf("Continuously move stepper motor clockwise\n");
                 break;
             case 2:
-                eMotorStatus = MOTOR_COUNTERCLOCKWISE;
-                xQueueSend(xMotorQueue, &eMotorStatus, 0);
-                printf("Continuously move stepper motor counterclockwise\n");
+                eMotorCode = MOTOR_COUNTERCLOCKWISE;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                //printf("Continuously move stepper motor counterclockwise\n");
                 break;
             case 3:
-                eMotorStatus = MOTOR_ALTERNATE;
-                xQueueSend(xMotorQueue, &eMotorStatus, 0);
-                printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
+                eMotorCode = MOTOR_ALTERNATE;
+                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                //printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
                 break;
             default:
                 printf("Error: unknown input\n");

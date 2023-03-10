@@ -38,6 +38,7 @@ add_executable(
     source/error.c
     source/motor.c
     source/motor_driver.c
+    source/sensor.c
     source/sensor_driver.c
     )
 

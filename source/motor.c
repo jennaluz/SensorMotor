@@ -14,6 +14,8 @@
 #include "error.h"
 #include "motor.h"
 #include "motor_driver.h"
+#include "sensor.h"
+#include "system_code.h"
 
 
 QueueHandle_t xMotorQueue = NULL;
@@ -25,13 +27,22 @@ QueueHandle_t xMotorQueue = NULL;
  */
 void vMotorHandler()
 {
-    motor_code_e eCode = MOTOR_CLOCKWISE;
-    motor_code_e eStatus = eCode;
+    system_code_e eMotorCode = MOTOR_CLOCKWISE;
+    system_code_e eStatus = eMotorCode;
+    int iOldTmp = 70;
+    int iNewTmp = 0;
+    int iOldHmd = 45;
+    int iNewHmd = 0;
+
+    int i = 0;
+    for (i = 0; i < 100; i++) {
+        printf("%d\n", eMotorCode);
+    }
 
     while (true) {
-        xQueueReceive(xMotorQueue, &eCode, 0);
+        xQueueReceive(xMotorQueue, &eMotorCode, 0);
 
-        switch (eStatus) {
+        switch (eMotorCode) {
             case MOTOR_CLOCKWISE:
                 vMotorClockwise();
                 break;
@@ -42,7 +53,34 @@ void vMotorHandler()
                 vMotorAlternate();
                 break;
             case MOTOR_TEMPERATURE:
+                xQueuePeek(xTemperatureQueue, &iNewTmp, 0);
+
+                if (iNewTmp == iOldTmp) {
+                    vMotorHalt();
+                } else {
+                    if (iNewTmp > iOldTmp) {
+                        vMotorIncrement();
+                    } else {
+                        vMotorDecrement();
+                    }
+                }
+
+                iOldTmp = iNewTmp;
+                break;
             case MOTOR_HUMIDITY:
+                xQueuePeek(xHumidityQueue, &iNewHmd, 0);
+
+                if (iNewHmd == iOldHmd) {
+                    vMotorHalt();
+                } else {
+                    if (iNewHmd > iOldHmd) {
+                        vMotorIncrement();
+                    } else {
+                        vMotorDecrement();
+                    }
+                }
+
+                iOldHmd = iNewHmd;
                 break;
             case MOTOR_HALT:
                 break;

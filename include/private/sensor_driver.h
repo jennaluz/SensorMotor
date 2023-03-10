@@ -10,5 +10,5 @@
 
 
 void vSensorInit();
-void vSensorReadTmp();
-void vSensorReadHmd();
+float fSensorReadTmp();
+float fSensorReadHmd();

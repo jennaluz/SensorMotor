@@ -1,16 +1,21 @@
 /*
  * SensorMotor/source/motor_driver.c
+ *
+ * Sends a sequence of signals to the Stepper Motor GPIO pins to manipulate it.
  */
 
+
+#include <pico/stdlib.h>
 
 #include "motor_driver.h"
 
 
-const uint COIL_1       = 12;
-const uint COIL_2       = 13;
-const uint COIL_3       = 6;
-const uint COIL_4       = 0;
-const uint REV_STEPS    = 525; // revolutions per step
+const uint COIL_1         = 12;
+const uint COIL_2         = 13;
+const uint COIL_3         = 6;
+const uint COIL_4         = 0;
+const uint REV_STEPS      = 525; // revolutions per step
+const uint INTERVAL_STEPS = 10;
 
 
 /*
@@ -105,6 +110,43 @@ void vMotorAlternate()
     }
 
     for (i = 0; i < REV_STEPS; i++) {
+        vMotorCounterclockwise();
+    }
+}
+
+
+/*
+ * Sends an invalid step sequence to halt the Stepper Motor.
+ */
+void vMotorHalt()
+{
+    gpio_put(COIL_4, 0);
+    gpio_put(COIL_4, 1);
+}
+
+
+/*
+ * Moves the Stepper Motor a small amount clockwise.
+ */
+void vMotorIncrement()
+{
+    int i = 0;
+
+    for (i = 0; i < INTERVAL_STEPS; i++) {
+        vMotorClockwise();
+    }
+}
+
+
+
+/*
+ * Moves the Stepper Motor a small amount counterclockwise.
+ */
+void vMotorDecrement()
+{
+    int i = 0;
+
+    for (i = 0; i < INTERVAL_STEPS; i++) {
         vMotorCounterclockwise();
     }
 }

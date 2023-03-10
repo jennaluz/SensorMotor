@@ -6,11 +6,7 @@
 #pragma once
 
 
-typedef enum error_code_e {
-    ERROR_UNKNOWN_INPUT   = 9,
-    ERROR_OVERFLOW        = 10,
-    ERROR_EMERGENCY_STOP  = 11,
-} error_code_e;
+#include "system_code.h"
 
 
-void vError(error_code_e eError);
+void vError(system_code_e eError);

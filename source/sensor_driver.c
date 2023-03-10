@@ -39,9 +39,9 @@ void vSensorInit()
 
 /*
  * Reads in the HDC1080 temperature register.
- * Converts value into degrees fahrenheit.
+ * Converts value into degrees fahrenheit and returns that value.
  */
-void vSensorReadTmp()
+float fSensorReadTmp()
 {
     uint8_t uiTmpValue[2] = {};
     int8_t iReturn = 0;
@@ -58,7 +58,9 @@ void vSensorReadTmp()
 
     // convert return value to fahrenheit
     fFahrenheit = (((uiReturnValue / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
-    printf("%f degrees F\n", fFahrenheit);
+    //printf("%f degrees F\n", fFahrenheit);
+
+    return fFahrenheit;
 }
 
 
@@ -66,7 +68,7 @@ void vSensorReadTmp()
  * Reads in the HDC1080 humidity register.
  * Converts value into relative humditiy.
  */
-void vSensorReadHmd()
+float fSensorReadHmd()
 {
     uint8_t uiHmdValue[2] = {};
     int8_t iReturn = 0;
@@ -83,5 +85,8 @@ void vSensorReadHmd()
 
     // convert return value to relative humidity
     fRelativeHumdity = (uiReturnValue / pow(2, 16)) * 100;
-    printf("RH %f\n", fRelativeHumdity);
+    //printf("RH %f\n", fRelativeHumdity);
+
+    // return relative humidity
+    return fRelativeHumdity;
 }
