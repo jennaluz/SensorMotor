@@ -18,9 +18,10 @@
 #include <stdio.h>
 
 #include "button.h"
-#include "system_code.h"
+#include "display.h"
 #include "motor.h"
 #include "sensor.h"
+#include "system_code.h"
 
 
 SemaphoreHandle_t xButton1Semaphore = NULL;
@@ -101,12 +102,12 @@ void vButton1Handler()
         switch (uiPushes) {
             case 1:
                 eMotorCode = MOTOR_TEMPERATURE;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 //printf("Move stepper motor on temperature\n");
                 break;
             case 2:
                 eMotorCode = MOTOR_HUMIDITY;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 //printf("Move stepper motor on humidity\n");
                 break;
             case 3:
@@ -115,10 +116,13 @@ void vButton1Handler()
                 } else {
                     eSensorBase = DECIMAL;
                 }
+
+                printf("toggle between\n");
+                xQueueOverwrite(xSensorBaseQueue, &eSensorBase);
                 break;
             case 4:
                 eMotorCode = MOTOR_HALT;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 printf("Emergency stop stepper motor\n");
                 break;
             default:
@@ -164,17 +168,17 @@ void vButton2Handler()
         switch (uiPushes) {
             case 1:
                 eMotorCode = MOTOR_CLOCKWISE;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 //printf("Continuously move stepper motor clockwise\n");
                 break;
             case 2:
                 eMotorCode = MOTOR_COUNTERCLOCKWISE;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 //printf("Continuously move stepper motor counterclockwise\n");
                 break;
             case 3:
                 eMotorCode = MOTOR_ALTERNATE;
-                xQueueSend(xMotorQueue, &eMotorCode, 0);
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
                 //printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
                 break;
             default:
@@ -195,6 +199,7 @@ void vButton2Handler()
  */
 void vButton3Handler()
 {
+    system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
     static uint uiPushes = 0;
     static absolute_time_t xEndTime = 0;
 
@@ -216,7 +221,23 @@ void vButton3Handler()
             }
         }
 
-        printf("Button 3 was pushed %d time(s).\n", uiPushes);
+        //printf("Button 3 was pushed %d time(s).\n", uiPushes);
+        switch(uiPushes) {
+            case 1:
+                eDisplayCode = DISPLAY_TEMPERATURE;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                break;
+            case 2:
+                eDisplayCode = DISPLAY_HUMIDITY;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                break;
+            case 3:
+                eDisplayCode = MOTOR_STATUS;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
 
         // reset pushes counter
         uiPushes = 0;
