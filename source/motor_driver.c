@@ -35,8 +35,6 @@ void vMotorInit()
     gpio_set_dir(COIL_2, GPIO_OUT);
     gpio_set_dir(COIL_3, GPIO_OUT);
     gpio_set_dir(COIL_4, GPIO_OUT);
-
-    return;
 }
 
 /*

@@ -55,3 +55,123 @@ void vDisplayReset()
     gpio_put(PIN_G, 0);
     gpio_put(PIN_DP, 0);
 }
+
+
+/*
+ *
+ */
+void vConfigDisplay(display_config_e eConfig)
+{
+    //vDisplayReset();
+
+    switch (eConfig) {
+        case DISPLAY_0:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            break;
+        case DISPLAY_1:
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            break;
+        case DISPLAY_2:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_3:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_4:
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_5:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_6:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_7:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            break;
+        case DISPLAY_8:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_9:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_A:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_B:
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_C:
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_D:
+            gpio_put(PIN_B, 1);
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_E:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_D, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_F:
+            gpio_put(PIN_A, 1);
+            gpio_put(PIN_E, 1);
+            gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+    }
+}

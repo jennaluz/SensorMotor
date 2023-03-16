@@ -29,17 +29,16 @@ QueueHandle_t xHumidityQueue = NULL;
  */
 void vSensorHandler()
 {
-    //sensor_base_e eBase = DECIMAL;
     int iTemperature = 0;
     int iHumidity = 0;
 
     while (true) {
         iTemperature = fSensorReadTmp();
         xQueueOverwrite(xTemperatureQueue, &iTemperature);
-        vTaskDelay(150);
 
         iHumidity = fSensorReadHmd();
         xQueueOverwrite(xHumidityQueue, &iHumidity);
-        vTaskDelay(150);
+
+        taskYIELD();
     }
 }

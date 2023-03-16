@@ -40,8 +40,8 @@ int main()
 
     // create queues
     xDisplayQueue = xQueueCreate(10, sizeof(int));
-    xLeftDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
-    xRightDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
+    xLeftDisplayQueue = xQueueCreate(1, sizeof(int));
+    xRightDisplayQueue = xQueueCreate(1, sizeof(int));
     xMotorQueue = xQueueCreate(1, sizeof(int));
     xSensorBaseQueue = xQueueCreate(1, sizeof(int));
     xTemperatureQueue = xQueueCreate(1, sizeof(int));
@@ -54,7 +54,7 @@ int main()
     xTaskCreate(vDisplayHandler, "Display", 256, NULL, 3, NULL);
     xTaskCreate(vLeftDisplayHandler, "Left Display", 256, NULL, 3, NULL);
     xTaskCreate(vRightDisplayHandler, "Right Display", 256, NULL, 3, NULL);
-    //xTaskCreate(vMotorHandler, "Stepper Motor Handler", 256, NULL, 3, NULL);
+    xTaskCreate(vMotorHandler, "Stepper Motor Handler", 256, NULL, 3, NULL);
     xTaskCreate(vSensorHandler, "HDC1080 Handler", 256, NULL, 3, NULL);
 
     // give display semaphore

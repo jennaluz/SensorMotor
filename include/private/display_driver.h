@@ -24,6 +24,26 @@ typedef enum display_pinout_e {
     PIN_DP  = 24,
 } display_pinout_e;
 
+typedef enum display_config_e {
+    DISPLAY_0 = 0,
+    DISPLAY_1 = 1,
+    DISPLAY_2 = 2,
+    DISPLAY_3 = 3,
+    DISPLAY_4 = 4,
+    DISPLAY_5 = 5,
+    DISPLAY_6 = 6,
+    DISPLAY_7 = 7,
+    DISPLAY_8 = 8,
+    DISPLAY_9 = 9,
+    DISPLAY_A = 10,
+    DISPLAY_B = 11,
+    DISPLAY_C = 12,
+    DISPLAY_D = 13,
+    DISPLAY_E = 14,
+    DISPLAY_F = 15,
+} display_config_e;
+
 
 void vDisplayInit();
 void vDisplayReset();
+void vConfigDisplay(display_config_e eConfig);

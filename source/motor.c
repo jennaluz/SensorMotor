@@ -83,6 +83,8 @@ void vMotorHandler()
                 iOldHmd = iNewHmd;
                 break;
             case MOTOR_HALT:
+                //printf("Here");
+                vMotorHalt();
                 break;
             case MOTOR_STATUS:
                 break;

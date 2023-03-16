@@ -1,5 +1,7 @@
 /*
  * SensorMotor/source/display.c
+ *
+ * Receives data from xDisplayQueue and configures the left and right display based on data.
  */
 
 
@@ -15,6 +17,7 @@
 #include "display.h"
 #include "display_driver.h"
 #include "sensor.h"
+#include "sensor_driver.h"
 #include "system_code.h"
 
 
@@ -23,58 +26,47 @@ QueueHandle_t xLeftDisplayQueue = NULL;
 QueueHandle_t xRightDisplayQueue = NULL;
 SemaphoreHandle_t xDisplaySemaphore = NULL;
 
-enum display_index_e {
-    DISPLAY_C = 12,
-    DISPLAY_D = 13,
-    DISPLAY_E = 14,
-    DISPLAY_F = 15,
-    DISPLAY_H = 16,
-    DISPLAY_O = 17,
-    DISPLAY_X = 18,
-};
-
 
 /*
- *
+ * Recevies input from xDisplayQueue and switches based on value.
+ * Proceeds to receive data from required queues and sends left and right display value to
+ *    respective queues.
  */
 void vDisplayHandler()
 {
     system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
     sensor_base_e eSensorBase = DECIMAL;
-    int iTemperature = 0;
-    int iHumidity = 0;
-    uint8_t uiDisplayConfig[19] = {
-        0xFC, 0x60, 0xDA, 0xF2, 0x66, 0xB6, 0xBE, 0xE0, 0xFE, 0xE6, // digits
-        0xEE, 0x3E, 0x1A, 0x7A, 0x9E, 0x8E, 0x1E, 0x3A, 0x92,       // characters
-    };
+    int iTemperature = 70;
+    int iHumidity = 50;
+    int iSensorDigit[2] = {0, 0};
 
     while (true) {
         xQueueReceive(xDisplayQueue, &eDisplayCode, 0);
 
         switch (eDisplayCode) {
             case DISPLAY_TEMPERATURE:
-                xQueuePeek(xSensorBaseQueue, &eSensorBase, 0);
-                xQueuePeek(xTemperatureQueue, &iTemperature, 0);
+                xQueueReceive(xSensorBaseQueue, &eSensorBase, 0);
+                xQueueReceive(xTemperatureQueue, &iTemperature, 0);
 
                 if (eSensorBase == DECIMAL) {
-                    xQueueSend(xLeftDisplayQueue, &uiDisplayConfig[iTemperature / 10], 0);
-                    xQueueSend(xRightDisplayQueue, &uiDisplayConfig[iTemperature % 10], 0);
+                    iSensorDigit[0] = iTemperature / 10;
+                    iSensorDigit[1] = iTemperature % 10;
                 } else {
-                    xQueueSend(xLeftDisplayQueue, &uiDisplayConfig[iTemperature / 16], 0);
-                    xQueueSend(xRightDisplayQueue, &uiDisplayConfig[iTemperature % 16], 0);
+                    iSensorDigit[0] = iTemperature / 16;
+                    iSensorDigit[1] = iTemperature % 16;
                 }
 
                 break;
             case DISPLAY_HUMIDITY:
-                xQueuePeek(xSensorBaseQueue, &eSensorBase, 0);
-                xQueuePeek(xHumidityQueue, &iHumidity, 0);
+                xQueueReceive(xSensorBaseQueue, &eSensorBase, 0);
+                xQueueReceive(xHumidityQueue, &iHumidity, 0);
 
                 if (eSensorBase == DECIMAL) {
-                    xQueueSend(xLeftDisplayQueue, &uiDisplayConfig[iHumidity / 10], 0);
-                    xQueueSend(xRightDisplayQueue, &uiDisplayConfig[iHumidity % 10], 0);
+                    iSensorDigit[0] = iHumidity / 10;
+                    iSensorDigit[1] = iHumidity % 10;
                 } else {
-                    xQueueSend(xLeftDisplayQueue, &uiDisplayConfig[iHumidity / 16], 0);
-                    xQueueSend(xRightDisplayQueue, &uiDisplayConfig[iHumidity % 16], 0);
+                    iSensorDigit[0] = iHumidity / 16;
+                    iSensorDigit[1] = iHumidity % 16;
                 }
 
                 break;
@@ -85,61 +77,39 @@ void vDisplayHandler()
             case ERROR_OVERFLOW:
                 break;
             case ERROR_EMERGENCY_STOP:
+                iSensorDigit[0] = DISPLAY_E;
+                iSensorDigit[1] = DISPLAY_E;
+
                 break;
             default:
                 printf("Error\n");
         }
 
-        taskYIELD();
+        xQueueSend(xLeftDisplayQueue, &iSensorDigit[0], 0);
+        xQueueSend(xRightDisplayQueue, &iSensorDigit[1], 0);
+
+        vTaskDelay(1);
     }
 }
 
 
 /*
- *
+ * Uses xDisplaySemaphore to synchronize with vRightDisplayHandler.
+ * Recevies data from xLeftDisplayQueue and configures pins according to data.
  */
 void vLeftDisplayHandler()
 {
-    uint8_t uiPinConfig = 0x00;
-    uint8_t uiMask = 0x01;
+    int iPinConfig = 0;
 
     while (true) {
         if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
-            xQueueReceive(xLeftDisplayQueue, &uiPinConfig, 0);
-            //printf("L%d\n", uiPinConfig);
-            gpio_put(PIN_CC2, 1);
+            xQueueReceive(xLeftDisplayQueue, &iPinConfig, 0);
+
             vDisplayReset();
-
-            for (uiMask = 0x01; uiMask > 0; uiMask <<= 1) {
-                switch (uiPinConfig & uiMask) {
-                    case 0x80:
-                        gpio_put(PIN_A, 1);
-                        break;
-                    case 0x40:
-                        gpio_put(PIN_B, 1);
-                        break;
-                    case 0x20:
-                        gpio_put(PIN_C, 1);
-                        break;
-                    case 0x10:
-                        gpio_put(PIN_D, 1);
-                        break;
-                    case 0x08:
-                        gpio_put(PIN_E, 1);
-                        break;
-                    case 0x04:
-                        gpio_put(PIN_F, 1);
-                        break;
-                    case 0x02:
-                        gpio_put(PIN_G, 1);
-                        break;
-                    case 0x01:
-                        gpio_put(PIN_DP, 1);
-                        break;
-                }
-            }
-
+            gpio_put(PIN_CC2, 1);
             gpio_put(PIN_CC1, 0);
+            vConfigDisplay(iPinConfig);
+
             xSemaphoreGive(xDisplaySemaphore);
         }
 
@@ -148,52 +118,23 @@ void vLeftDisplayHandler()
 }
 
 
-
 /*
- *
+ * Uses xDisplaySemaphore to synchronize with vLeftDisplayHandler.
+ * Recevies data from xRightDisplayQueue and configures pins according to data.
  */
 void vRightDisplayHandler()
 {
-    uint8_t uiPinConfig = 0x00;
-    uint8_t uiMask = 0x01;
+    int iPinConfig = 0;
 
     while (true) {
         if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
-            xQueueReceive(xRightDisplayQueue, &uiPinConfig, 0);
-            //printf("R%d\n", uiPinConfig);
-            gpio_put(PIN_CC1, 1);
+            xQueueReceive(xRightDisplayQueue, &iPinConfig, 0);
+
             vDisplayReset();
-
-            for (uiMask = 0x01; uiMask > 0; uiMask <<= 1) {
-                switch (uiPinConfig & uiMask) {
-                    case 0x80:
-                        gpio_put(PIN_A, 1);
-                        break;
-                    case 0x40:
-                        gpio_put(PIN_B, 1);
-                        break;
-                    case 0x20:
-                        gpio_put(PIN_C, 1);
-                        break;
-                    case 0x10:
-                        gpio_put(PIN_D, 1);
-                        break;
-                    case 0x08:
-                        gpio_put(PIN_E, 1);
-                        break;
-                    case 0x04:
-                        gpio_put(PIN_F, 1);
-                        break;
-                    case 0x02:
-                        gpio_put(PIN_G, 1);
-                        break;
-                    case 0x01:
-                        gpio_put(PIN_DP, 1);
-                        break;
-                }
-            }
-
+            gpio_put(PIN_CC1, 1);
             gpio_put(PIN_CC2, 0);
+            vConfigDisplay(iPinConfig);
+
             xSemaphoreGive(xDisplaySemaphore);
         }
 

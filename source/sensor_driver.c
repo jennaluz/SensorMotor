@@ -6,6 +6,9 @@
  */
 
 
+#include <FreeRTOS.h>
+#include <task.h>
+
 #include <hardware/i2c.h>
 #include <math.h>
 #include <pico/binary_info.h>
@@ -50,7 +53,7 @@ float fSensorReadTmp()
 
     // point to temperature register
     iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_TMP_REG, 1, false);
-    sleep_ms(25);
+    vTaskDelay(20);
 
     // read from temperature register
     iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiTmpValue, 2, false);
@@ -77,7 +80,7 @@ float fSensorReadHmd()
 
     // point to humidity register
     iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_HMD_REG, 1, false);
-    sleep_ms(25);
+    vTaskDelay(20);
 
     // read from humidity register
     iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiHmdValue, 2, false);
