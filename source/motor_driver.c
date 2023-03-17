@@ -17,7 +17,7 @@ const uint COIL_1         = 12;
 const uint COIL_2         = 13;
 const uint COIL_3         = 6;
 const uint COIL_4         = 0;
-const uint REV_STEPS      = 525; // revolutions per step
+const uint REV_STEPS      = 255; // revolutions per step
 const uint INTERVAL_STEPS = 10;
 
 

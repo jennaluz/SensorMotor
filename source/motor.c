@@ -88,5 +88,7 @@ void motor_handler()
             default:
                 error(ERROR_UNKNOWN_INPUT);
         }
+
+        taskYIELD();
     }
 }

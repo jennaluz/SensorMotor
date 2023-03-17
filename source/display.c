@@ -45,8 +45,9 @@ void display_handler()
 
         switch (display_code) {
             case DISPLAY_TEMPERATURE:
-                xQueueReceive(sensor_base_queue, &base_code, 0);
-                xQueueReceive(temperature_queue, &temperature, 0);
+                xQueuePeek(sensor_base_queue, &base_code, 0);
+                printf("base %d\n", base_code);
+                xQueuePeek(temperature_queue, &temperature, 0);
 
                 if (base_code == DECIMAL) {
                     sensor_digit[0] = temperature / 10;
@@ -58,8 +59,8 @@ void display_handler()
 
                 break;
             case DISPLAY_HUMIDITY:
-                xQueueReceive(sensor_base_queue, &base_code, 0);
-                xQueueReceive(humidity_queue, &humidity, 0);
+                xQueuePeek(sensor_base_queue, &base_code, 0);
+                xQueuePeek(humidity_queue, &humidity, 0);
 
                 if (base_code == DECIMAL) {
                     sensor_digit[0] = humidity / 10;

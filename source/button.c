@@ -81,6 +81,8 @@ void button1_handler()
     sensor_base base_code = DECIMAL;
     system_code motor_code = MOTOR_TEMPERATURE;
 
+    xQueueSend(sensor_base_queue, &base_code, 0);
+
     while (true) {
         if (xSemaphoreTake(button1_semaphore, portMAX_DELAY) == pdTRUE) {
             // button 1 was pushed
@@ -100,19 +102,23 @@ void button1_handler()
 
             switch (button_pushes) {
                 case 1:
+                    printf("move on temp\n");
                     motor_code = MOTOR_TEMPERATURE;
                     xQueueOverwrite(motor_queue, &motor_code);
 
                     break;
                 case 2:
+                    printf("move on humid\n");
                     motor_code = MOTOR_HUMIDITY;
                     xQueueOverwrite(motor_queue, &motor_code);
 
                     break;
                 case 3:
                     if (base_code == DECIMAL) {
+                        printf("change to hex\n");
                         base_code = HEXADECIMAL;
                     } else {
+                        printf("change to dec\n");
                         base_code = DECIMAL;
                     }
 
@@ -120,6 +126,7 @@ void button1_handler()
 
                     break;
                 case 4:
+                    printf("emergency stop\n");
                     error(ERROR_EMERGENCY_STOP);
                     motor_code = MOTOR_HALT;
                     xQueueOverwrite(motor_queue, &motor_code);
@@ -169,16 +176,19 @@ void button2_handler()
             // make decision based on count of pushes
             switch (button_pushes) {
                 case 1:
+                    printf("motor clockwise\n");
                     motor_code = MOTOR_CLOCKWISE;
                     xQueueOverwrite(motor_queue, &motor_code);
 
                     break;
                 case 2:
+                    printf("motor counterclockwise\n");
                     motor_code = MOTOR_COUNTERCLOCKWISE;
                     xQueueOverwrite(motor_queue, &motor_code);
 
                     break;
                 case 3:
+                    printf("motor alternate\n");
                     motor_code = MOTOR_ALTERNATE;
                     xQueueOverwrite(motor_queue, &motor_code);
 
@@ -225,14 +235,17 @@ void button3_handler()
 
             switch(button_pushes) {
                 case 1:
+                    printf("display temp\n");
                     display_code = DISPLAY_TEMPERATURE;
                     xQueueSend(display_queue, &display_code, 0);
                     break;
                 case 2:
+                    printf("display humid\n");
                     display_code = DISPLAY_HUMIDITY;
                     xQueueSend(display_queue, &display_code, 0);
                     break;
                 case 3:
+                    printf("display motor status\n");
                     display_code = MOTOR_STATUS;
                     xQueueSend(display_queue, &display_code, 0);
                     break;
