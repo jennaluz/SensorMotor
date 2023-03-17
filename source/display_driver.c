@@ -10,7 +10,7 @@
 /*
  * Initializes all GPIO pins for the 7 Segment Display
  */
-void vDisplayInit()
+void display_init()
 {
     gpio_init(PIN_CC1);
     gpio_init(PIN_CC2);
@@ -44,7 +44,7 @@ void vDisplayInit()
 /*
 *
 */
-void vDisplayReset()
+void display_reset()
 {
     gpio_put(PIN_A, 0);
     gpio_put(PIN_B, 0);
@@ -60,11 +60,11 @@ void vDisplayReset()
 /*
  *
  */
-void vConfigDisplay(display_config_e eConfig)
+void config_display(display_config config)
 {
-    //vDisplayReset();
+    display_reset();
 
-    switch (eConfig) {
+    switch (config) {
         case DISPLAY_0:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);

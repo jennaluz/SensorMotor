@@ -8,7 +8,7 @@
 #pragma once
 
 
-typedef enum system_code_e {
+typedef enum system_code {
     DISPLAY_TEMPERATURE     = 0,
     DISPLAY_HUMIDITY        = 1,
     MOTOR_CLOCKWISE         = 2,
@@ -21,4 +21,4 @@ typedef enum system_code_e {
     ERROR_UNKNOWN_INPUT     = 9,
     ERROR_OVERFLOW          = 10,
     ERROR_EMERGENCY_STOP    = 11,
-} system_code_e;
+} system_code;

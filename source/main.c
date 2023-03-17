@@ -27,38 +27,38 @@ int main()
     stdio_init_all();
 
     // initialize stepper motor gpio pins
-    vDisplayInit();
-    vMotorInit();
-    vSensorInit();
-    vButtonIRQInit();
+    button_irq_init();
+    display_init();
+    motor_init();
+    sensor_init();
 
     // create semaphores
-    xButton1Semaphore = xSemaphoreCreateBinary();
-    xButton2Semaphore = xSemaphoreCreateBinary();
-    xButton3Semaphore = xSemaphoreCreateBinary();
-    xDisplaySemaphore = xSemaphoreCreateBinary();
+    button1_semaphore = xSemaphoreCreateBinary();
+    button2_semaphore = xSemaphoreCreateBinary();
+    button3_semaphore = xSemaphoreCreateBinary();
+    display_semaphore = xSemaphoreCreateBinary();
 
     // create queues
-    xDisplayQueue = xQueueCreate(10, sizeof(int));
-    xLeftDisplayQueue = xQueueCreate(1, sizeof(int));
-    xRightDisplayQueue = xQueueCreate(1, sizeof(int));
-    xMotorQueue = xQueueCreate(1, sizeof(int));
-    xSensorBaseQueue = xQueueCreate(1, sizeof(int));
-    xTemperatureQueue = xQueueCreate(1, sizeof(int));
-    xHumidityQueue = xQueueCreate(1, sizeof(int));
+    display_queue = xQueueCreate(10, sizeof(int));
+    left_display_queue = xQueueCreate(1, sizeof(int));
+    right_display_queue = xQueueCreate(1, sizeof(int));
+    motor_queue = xQueueCreate(1, sizeof(int));
+    sensor_base_queue = xQueueCreate(1, sizeof(int));
+    temperature_queue = xQueueCreate(1, sizeof(int));
+    humidity_queue = xQueueCreate(1, sizeof(int));
 
     // create tasks
-    xTaskCreate(vButton1Handler, "Button 1", 256, NULL, 4, NULL);
-    xTaskCreate(vButton2Handler, "Button 2", 256, NULL, 4, NULL);
-    xTaskCreate(vButton3Handler, "Button 3", 256, NULL, 4, NULL);
-    xTaskCreate(vDisplayHandler, "Display", 256, NULL, 3, NULL);
-    xTaskCreate(vLeftDisplayHandler, "Left Display", 256, NULL, 3, NULL);
-    xTaskCreate(vRightDisplayHandler, "Right Display", 256, NULL, 3, NULL);
-    xTaskCreate(vMotorHandler, "Stepper Motor Handler", 256, NULL, 3, NULL);
-    xTaskCreate(vSensorHandler, "HDC1080 Handler", 256, NULL, 3, NULL);
+    xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);
+    xTaskCreate(button2_handler, "Button 2", 256, NULL, 4, NULL);
+    xTaskCreate(button3_handler, "Button 3", 256, NULL, 4, NULL);
+    xTaskCreate(display_handler, "Display", 256, NULL, 3, NULL);
+    xTaskCreate(left_display_handler, "Left Display", 256, NULL, 3, NULL);
+    xTaskCreate(right_display_handler, "Right Display", 256, NULL, 3, NULL);
+    xTaskCreate(motor_handler, "Stepper Motor Handler", 256, NULL, 3, NULL);
+    xTaskCreate(sensor_handler, "HDC1080 Handler", 256, NULL, 3, NULL);
 
     // give display semaphore
-    xSemaphoreGive(xDisplaySemaphore);
+    xSemaphoreGive(display_semaphore);
 
     vTaskStartScheduler();
 

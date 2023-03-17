@@ -9,4 +9,4 @@
 #include "system_code.h"
 
 
-void vError(system_code_e eError);
+void error(system_code error_code);

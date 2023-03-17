@@ -1,7 +1,7 @@
 /*
  * SensorMotor/source/display.c
  *
- * Receives data from xDisplayQueue and configures the left and right display based on data.
+ * Receives data from display_queue and configures the left and right display based on data.
  */
 
 
@@ -21,10 +21,10 @@
 #include "system_code.h"
 
 
-QueueHandle_t xDisplayQueue = NULL;
-QueueHandle_t xLeftDisplayQueue = NULL;
-QueueHandle_t xRightDisplayQueue = NULL;
-SemaphoreHandle_t xDisplaySemaphore = NULL;
+QueueHandle_t display_queue = NULL;
+QueueHandle_t left_display_queue = NULL;
+QueueHandle_t right_display_queue = NULL;
+SemaphoreHandle_t display_semaphore = NULL;
 
 
 /*
@@ -32,41 +32,41 @@ SemaphoreHandle_t xDisplaySemaphore = NULL;
  * Proceeds to receive data from required queues and sends left and right display value to
  *    respective queues.
  */
-void vDisplayHandler()
+void display_handler()
 {
-    system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
-    sensor_base_e eSensorBase = DECIMAL;
-    int iTemperature = 70;
-    int iHumidity = 50;
-    int iSensorDigit[2] = {0, 0};
+    system_code display_code = DISPLAY_TEMPERATURE;
+    sensor_base base_code = DECIMAL;
+    int temperature = 70;
+    int humidity = 50;
+    int sensor_digit[2] = {0, 0};
 
     while (true) {
-        xQueueReceive(xDisplayQueue, &eDisplayCode, 0);
+        xQueueReceive(display_queue, &display_code, 0);
 
-        switch (eDisplayCode) {
+        switch (display_code) {
             case DISPLAY_TEMPERATURE:
-                xQueueReceive(xSensorBaseQueue, &eSensorBase, 0);
-                xQueueReceive(xTemperatureQueue, &iTemperature, 0);
+                xQueueReceive(sensor_base_queue, &base_code, 0);
+                xQueueReceive(temperature_queue, &temperature, 0);
 
-                if (eSensorBase == DECIMAL) {
-                    iSensorDigit[0] = iTemperature / 10;
-                    iSensorDigit[1] = iTemperature % 10;
+                if (base_code == DECIMAL) {
+                    sensor_digit[0] = temperature / 10;
+                    sensor_digit[1] = temperature % 10;
                 } else {
-                    iSensorDigit[0] = iTemperature / 16;
-                    iSensorDigit[1] = iTemperature % 16;
+                    sensor_digit[0] = temperature / 16;
+                    sensor_digit[1] = temperature % 16;
                 }
 
                 break;
             case DISPLAY_HUMIDITY:
-                xQueueReceive(xSensorBaseQueue, &eSensorBase, 0);
-                xQueueReceive(xHumidityQueue, &iHumidity, 0);
+                xQueueReceive(sensor_base_queue, &base_code, 0);
+                xQueueReceive(humidity_queue, &humidity, 0);
 
-                if (eSensorBase == DECIMAL) {
-                    iSensorDigit[0] = iHumidity / 10;
-                    iSensorDigit[1] = iHumidity % 10;
+                if (base_code == DECIMAL) {
+                    sensor_digit[0] = humidity / 10;
+                    sensor_digit[1] = humidity % 10;
                 } else {
-                    iSensorDigit[0] = iHumidity / 16;
-                    iSensorDigit[1] = iHumidity % 16;
+                    sensor_digit[0] = humidity / 16;
+                    sensor_digit[1] = humidity % 16;
                 }
 
                 break;
@@ -77,16 +77,16 @@ void vDisplayHandler()
             case ERROR_OVERFLOW:
                 break;
             case ERROR_EMERGENCY_STOP:
-                iSensorDigit[0] = DISPLAY_E;
-                iSensorDigit[1] = DISPLAY_E;
+                sensor_digit[0] = DISPLAY_E;
+                sensor_digit[1] = DISPLAY_E;
 
                 break;
             default:
                 printf("Error\n");
         }
 
-        xQueueSend(xLeftDisplayQueue, &iSensorDigit[0], 0);
-        xQueueSend(xRightDisplayQueue, &iSensorDigit[1], 0);
+        xQueueSend(left_display_queue, &sensor_digit[0], 0);
+        xQueueSend(right_display_queue, &sensor_digit[1], 0);
 
         vTaskDelay(1);
     }
@@ -94,23 +94,22 @@ void vDisplayHandler()
 
 
 /*
- * Uses xDisplaySemaphore to synchronize with vRightDisplayHandler.
- * Recevies data from xLeftDisplayQueue and configures pins according to data.
+ * Uses display_semaphore to synchronize with right_display_handler().
+ * Recevies data from left_display_queue and configures pins according to data.
  */
-void vLeftDisplayHandler()
+void left_display_handler()
 {
-    int iPinConfig = 0;
+    int pin_config = 0;
 
     while (true) {
-        if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
-            xQueueReceive(xLeftDisplayQueue, &iPinConfig, 0);
+        if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
+            xQueueReceive(left_display_queue, &pin_config, 0);
 
-            vDisplayReset();
             gpio_put(PIN_CC2, 1);
+            config_display(pin_config);
             gpio_put(PIN_CC1, 0);
-            vConfigDisplay(iPinConfig);
 
-            xSemaphoreGive(xDisplaySemaphore);
+            xSemaphoreGive(display_semaphore);
         }
 
         taskYIELD();
@@ -119,23 +118,22 @@ void vLeftDisplayHandler()
 
 
 /*
- * Uses xDisplaySemaphore to synchronize with vLeftDisplayHandler.
- * Recevies data from xRightDisplayQueue and configures pins according to data.
+ * Uses display_semaphore to synchronize with left_display_handler().
+ * Recevies data from right_display_queue and configures pins according to data.
  */
-void vRightDisplayHandler()
+void right_display_handler()
 {
-    int iPinConfig = 0;
+    int pin_config = 0;
 
     while (true) {
-        if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
-            xQueueReceive(xRightDisplayQueue, &iPinConfig, 0);
+        if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
+            xQueueReceive(right_display_queue, &pin_config, 0);
 
-            vDisplayReset();
             gpio_put(PIN_CC1, 1);
+            config_display(pin_config);
             gpio_put(PIN_CC2, 0);
-            vConfigDisplay(iPinConfig);
 
-            xSemaphoreGive(xDisplaySemaphore);
+            xSemaphoreGive(display_semaphore);
         }
 
         taskYIELD();

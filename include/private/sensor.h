@@ -10,14 +10,14 @@
 #include <queue.h>
 
 
-extern QueueHandle_t xSensorBaseQueue;
-extern QueueHandle_t xTemperatureQueue;
-extern QueueHandle_t xHumidityQueue;
+extern QueueHandle_t sensor_base_queue;
+extern QueueHandle_t temperature_queue;
+extern QueueHandle_t humidity_queue;
 
-typedef enum sensor_base_e {
+typedef enum sensor_base {
     DECIMAL     = 0,
     HEXADECIMAL = 1,
-} sensor_base_e;
+} sensor_base;
 
 
-void vSensorHandler();
+void sensor_handler();

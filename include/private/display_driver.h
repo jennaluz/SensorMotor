@@ -11,7 +11,7 @@
 #include <pico/stdlib.h>
 
 
-typedef enum display_pinout_e {
+typedef enum display_pinout {
     PIN_CC1 = 11, // left digit
     PIN_CC2 = 10, // right digit
     PIN_A   = 26,
@@ -22,9 +22,9 @@ typedef enum display_pinout_e {
     PIN_F   = 7,
     PIN_G   = 28,
     PIN_DP  = 24,
-} display_pinout_e;
+} display_pinout;
 
-typedef enum display_config_e {
+typedef enum display_config {
     DISPLAY_0 = 0,
     DISPLAY_1 = 1,
     DISPLAY_2 = 2,
@@ -41,9 +41,9 @@ typedef enum display_config_e {
     DISPLAY_D = 13,
     DISPLAY_E = 14,
     DISPLAY_F = 15,
-} display_config_e;
+} display_config;
 
 
-void vDisplayInit();
-void vDisplayReset();
-void vConfigDisplay(display_config_e eConfig);
+void display_init();
+void display_reset();
+void config_display(display_config config);
