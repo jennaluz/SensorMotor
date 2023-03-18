@@ -230,16 +230,16 @@ void button3_handler()
         switch(button_pushes) {
             case 1:
                 display_code = DISPLAY_TEMPERATURE;
-                xQueueSend(xDisplayQueue, &display_code, 0);
+                xQueueSend(display_queue, &display_code, 0);
                 //printf("d\n");
                 break;
             case 2:
                 display_code = DISPLAY_HUMIDITY;
-                xQueueSend(xDisplayQueue, &display_code, 0);
+                xQueueSend(display_queue, &display_code, 0);
                 break;
             case 3:
                 display_code = MOTOR_STATUS;
-                xQueueSend(xDisplayQueue, &display_code, 0);
+                xQueueSend(display_queue, &display_code, 0);
                 break;
             default:
                 printf("Error: unknown input\n");

@@ -13,9 +13,9 @@
 #include <pico/stdlib.h>
 
 
-extern QueueHandle_t xDisplayQueue;
-extern QueueHandle_t xLeftDisplayQueue;
-extern QueueHandle_t xRightDisplayQueue;
+extern QueueHandle_t display_queue;
+extern QueueHandle_t left_display_queue;
+extern QueueHandle_t right_display_queue;
 extern SemaphoreHandle_t display_semaphore;
 
 

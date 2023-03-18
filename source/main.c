@@ -40,9 +40,9 @@ int main()
     display_semaphore = xSemaphoreCreateBinary();
 
     // create queues
-    xDisplayQueue = xQueueCreate(10, sizeof(system_code_e));
-    xLeftDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
-    xRightDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
+    display_queue = xQueueCreate(10, sizeof(system_code_e));
+    left_display_queue = xQueueCreate(1, sizeof(uint8_t));
+    right_display_queue = xQueueCreate(1, sizeof(uint8_t));
     motor_queue = xQueueCreate(1, sizeof(system_code_e));
     sensor_base_queue = xQueueCreate(1, sizeof(sensor_base_e));
     temperature_queue = xQueueCreate(1, sizeof(int));
