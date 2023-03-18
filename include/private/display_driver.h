@@ -25,6 +25,6 @@ typedef enum display_pinout_e {
 } display_pinout_e;
 
 
-void vDisplayInit();
-void vDisplayReset();
-void vConfigDisplay(int config);
+void display_init();
+void display_reset();
+void display_value(int config);

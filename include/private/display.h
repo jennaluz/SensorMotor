@@ -19,6 +19,6 @@ extern QueueHandle_t xRightDisplayQueue;
 extern SemaphoreHandle_t display_semaphore;
 
 
-void vDisplayHandler();
-void vLeftDisplayHandler();
-void vRightDisplayHandler();
+void display_handler();
+void left_display_handler();
+void right_display_handler();

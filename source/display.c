@@ -37,7 +37,7 @@ enum display_index_e {
 /*
  *
  */
-void vDisplayHandler()
+void display_handler()
 {
     system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
     sensor_base_e eSensorBase = DECIMAL;
@@ -116,7 +116,7 @@ void vDisplayHandler()
 /*
  *
  */
-void vLeftDisplayHandler()
+void left_display_handler()
 {
     uint8_t uiPinConfig = 0x00;
     uint8_t uiMask = 0x01;
@@ -126,8 +126,8 @@ void vLeftDisplayHandler()
             xQueueReceive(xLeftDisplayQueue, &uiPinConfig, 0);
             //printf("L%d\n", uiPinConfig);
             gpio_put(PIN_CC2, 1);
-            vDisplayReset();
-            vConfigDisplay(uiPinConfig);
+            display_reset();
+            display_value(uiPinConfig);
 
             gpio_put(PIN_CC1, 0);
             xSemaphoreGive(display_semaphore);
@@ -142,7 +142,7 @@ void vLeftDisplayHandler()
 /*
  *
  */
-void vRightDisplayHandler()
+void right_display_handler()
 {
     uint8_t uiPinConfig = 0x00;
     uint8_t uiMask = 0x01;
@@ -152,8 +152,8 @@ void vRightDisplayHandler()
             xQueueReceive(xRightDisplayQueue, &uiPinConfig, 0);
             //printf("R%d\n", uiPinConfig);
             gpio_put(PIN_CC1, 1);
-            vDisplayReset();
-            vConfigDisplay(uiPinConfig);
+            display_reset();
+            display_value(uiPinConfig);
 
             gpio_put(PIN_CC2, 0);
             xSemaphoreGive(display_semaphore);

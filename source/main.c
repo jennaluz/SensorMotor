@@ -28,7 +28,7 @@ int main()
     stdio_init_all();
 
     // initialize stepper motor gpio pins
-    vDisplayInit();
+    display_init();
     motor_init();
     sensor_init();
     button_irq_init();
@@ -52,9 +52,9 @@ int main()
     xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);
     xTaskCreate(button2_handler, "Button 2", 256, NULL, 4, NULL);
     xTaskCreate(button3_handler, "Button 3", 256, NULL, 4, NULL);
-    xTaskCreate(vDisplayHandler, "Display", 256, NULL, 3, NULL);
-    xTaskCreate(vLeftDisplayHandler, "Left Display", 256, NULL, 3, NULL);
-    xTaskCreate(vRightDisplayHandler, "Right Display", 256, NULL, 3, NULL);
+    xTaskCreate(display_handler, "Display", 256, NULL, 3, NULL);
+    xTaskCreate(left_display_handler, "Left Display", 256, NULL, 3, NULL);
+    xTaskCreate(right_display_handler, "Right Display", 256, NULL, 3, NULL);
     xTaskCreate(motor_handler, "Stepper Motor Handler", 256, NULL, 3, NULL);
     xTaskCreate(sensor_handler, "HDC1080 Handler", 256, NULL, 3, NULL);
 
