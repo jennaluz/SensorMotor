@@ -13,14 +13,16 @@
 #include <FreeRTOS.h>
 #include <semphr.h>
 
-
-extern SemaphoreHandle_t button1_semaphore;
-extern SemaphoreHandle_t button2_semaphore;
-extern SemaphoreHandle_t button3_semaphore;
+#include <pico/stdlib.h>
 
 
-void button_irq_init();
-void button_callback();
-void button1_handler();
-void button2_handler();
-void button3_handler();
+extern SemaphoreHandle_t xButton1Semaphore;
+extern SemaphoreHandle_t xButton2Semaphore;
+extern SemaphoreHandle_t xButton3Semaphore;
+
+
+void vButtonIRQInit();
+void vButtonCallback(uint gpio, uint32_t events);
+void vButton1Handler();
+void vButton2Handler();
+void vButton3Handler();

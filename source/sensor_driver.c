@@ -28,7 +28,7 @@ const uint8_t HDC_CONFIG_REG    = 0x02;
 /*
  * Initialize I2C port, and SDA and SCL pins.
  */
-void sensor_init()
+void vSensorInit()
 {
     // initialize default port on default SDA and SCL pins
     i2c_init(PICO_DEFAULT_I2C_INSTANCE, 100 * 1000);    // put I2C hardware into known state and enable
@@ -44,25 +44,26 @@ void sensor_init()
  * Reads in the HDC1080 temperature register.
  * Converts value into degrees fahrenheit and returns that value.
  */
-float sensor_read_tmp()
+float fSensorReadTmp()
 {
-    uint8_t reg_return[2] = {};
-    int8_t return_bytes = 0;
-    uint16_t return_value = 0;
-    float fahrenheit = 0;
+    uint8_t uiTmpValue[2] = {};
+    int8_t iReturn = 0;
+    uint16_t uiReturnValue = 0;
+    float fFahrenheit = 0;
 
     // point to temperature register
-    return_bytes = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_TMP_REG, 1, false);
+    iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_TMP_REG, 1, false);
     vTaskDelay(20);
 
     // read from temperature register
-    return_bytes = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, reg_return, 2, false);
-    return_value = (reg_return[0] << 8) | reg_return[1];
+    iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiTmpValue, 2, false);
+    uiReturnValue = (uiTmpValue[0] << 8) | uiTmpValue[1];
 
     // convert return value to fahrenheit
-    fahrenheit = (((return_value / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
+    fFahrenheit = (((uiReturnValue / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
+    //printf("%f degrees F\n", fFahrenheit);
 
-    return fahrenheit;
+    return fFahrenheit;
 }
 
 
@@ -70,24 +71,25 @@ float sensor_read_tmp()
  * Reads in the HDC1080 humidity register.
  * Converts value into relative humditiy.
  */
-float sensor_read_hmd()
+float fSensorReadHmd()
 {
-    uint8_t reg_value[2] = {};
-    int8_t func_return = 0;
-    uint16_t return_value = 0;
-    float relative_humdity = 0;
+    uint8_t uiHmdValue[2] = {};
+    int8_t iReturn = 0;
+    uint16_t uiReturnValue = 0;
+    float fRelativeHumdity = 0;
 
     // point to humidity register
-    func_return = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_HMD_REG, 1, false);
+    iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_HMD_REG, 1, false);
     vTaskDelay(20);
 
     // read from humidity register
-    func_return = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, reg_value, 2, false);
-    return_value = (reg_value[0] << 8) | reg_value[1];
+    iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiHmdValue, 2, false);
+    uiReturnValue = (uiHmdValue[0] << 8) | uiHmdValue[1];
 
     // convert return value to relative humidity
-    relative_humdity = (return_value / pow(2, 16)) * 100;
+    fRelativeHumdity = (uiReturnValue / pow(2, 16)) * 100;
+    //printf("RH %f\n", fRelativeHumdity);
 
     // return relative humidity
-    return relative_humdity;
+    return fRelativeHumdity;
 }

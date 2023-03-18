@@ -10,7 +10,7 @@
 /*
  * Initializes all GPIO pins for the 7 Segment Display
  */
-void display_init()
+void vDisplayInit()
 {
     gpio_init(PIN_CC1);
     gpio_init(PIN_CC2);
@@ -44,7 +44,7 @@ void display_init()
 /*
 *
 */
-void display_reset()
+void vDisplayReset()
 {
     gpio_put(PIN_A, 0);
     gpio_put(PIN_B, 0);
@@ -56,16 +56,10 @@ void display_reset()
     gpio_put(PIN_DP, 0);
 }
 
-
-/*
- *
- */
-void config_display(display_config config)
+void vConfigDisplay(int config)
 {
-    display_reset();
-
-    switch (config) {
-        case DISPLAY_0:
+    switch(config) {
+        case 0:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -73,38 +67,38 @@ void config_display(display_config config)
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             break;
-        case DISPLAY_1:
+        case 1:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             break;
-        case DISPLAY_2:
+        case 2:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_3:
+        case 3:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_4:
+        case 4:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_5:
+        case 5:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_6:
+        case 6:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
@@ -112,12 +106,12 @@ void config_display(display_config config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_7:
+        case 7:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             break;
-        case DISPLAY_8:
+        case 8:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -126,14 +120,14 @@ void config_display(display_config config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_9:
+        case 9:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_A:
+        case 10:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -141,33 +135,33 @@ void config_display(display_config config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_B:
+        case 11:
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_C:
+        case 12:
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_D:
+        case 13:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_E:
+        case 14:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_F:
+        case 15:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);

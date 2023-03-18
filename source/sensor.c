@@ -18,26 +18,27 @@
 #include "sensor_driver.h"
 
 
-QueueHandle_t sensor_base_queue = NULL;
-QueueHandle_t temperature_queue = NULL;
-QueueHandle_t humidity_queue = NULL;
+QueueHandle_t xSensorBaseQueue = NULL;
+QueueHandle_t xTemperatureQueue = NULL;
+QueueHandle_t xHumidityQueue = NULL;
 
 
 /*
  * Reads in temperature and humidity values from HDC1080.
  * Overwrites the corresponding queue to send the most up to date value.
  */
-void sensor_handler()
+void vSensorHandler()
 {
-    int temperature = 0;
-    int humidity = 0;
+    //sensor_base_e eBase = DECIMAL;
+    int iTemperature = 0;
+    int iHumidity = 0;
 
     while (true) {
-        temperature = sensor_read_tmp();
-        xQueueOverwrite(temperature_queue, &temperature);
+        iTemperature = fSensorReadTmp();
+        xQueueOverwrite(xTemperatureQueue, &iTemperature);
 
-        humidity = sensor_read_hmd();
-        xQueueOverwrite(humidity_queue, &humidity);
+        iHumidity = fSensorReadHmd();
+        xQueueOverwrite(xHumidityQueue, &iHumidity);
 
         taskYIELD();
     }

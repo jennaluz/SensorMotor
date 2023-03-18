@@ -19,15 +19,15 @@
 
 #include "button.h"
 #include "display.h"
-#include "error.h"
 #include "motor.h"
+#include "portmacro.h"
 #include "sensor.h"
 #include "system_code.h"
 
 
-SemaphoreHandle_t button1_semaphore = NULL;
-SemaphoreHandle_t button2_semaphore = NULL;
-SemaphoreHandle_t button3_semaphore = NULL;
+SemaphoreHandle_t xButton1Semaphore = NULL;
+SemaphoreHandle_t xButton2Semaphore = NULL;
+SemaphoreHandle_t xButton3Semaphore = NULL;
 
 const uint BUTTON_1 = 19;
 const uint BUTTON_2 = 9;
@@ -36,11 +36,11 @@ const uint BUTTON_3 = 8;
 
 /*
  * Initializes interrupt requests for each buttons.
- * Each event calls the button_callback() function.
+ * Each event calls the vButtonCallback() function.
  */
-void button_irq_init()
+void vButtonIRQInit()
 {
-    gpio_set_irq_enabled_with_callback(BUTTON_1, GPIO_IRQ_EDGE_RISE, true, button_callback);
+    gpio_set_irq_enabled_with_callback(BUTTON_1, GPIO_IRQ_EDGE_RISE, true, vButtonCallback);
     gpio_set_irq_enabled(BUTTON_2, GPIO_IRQ_EDGE_RISE, true);
     gpio_set_irq_enabled(BUTTON_3, GPIO_IRQ_EDGE_RISE, true);
 }
@@ -49,18 +49,18 @@ void button_irq_init()
 /*
  * Gives the semaphore corresponding to the button that was pushed.
  */
-void button_callback(uint gpio, uint32_t events)
+void vButtonCallback(uint gpio, uint32_t events)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     switch (gpio) {
         case BUTTON_1:
-            xSemaphoreGiveFromISR(button1_semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(xButton1Semaphore, &xHigherPriorityTaskWoken);
             break;
         case BUTTON_2:
-            xSemaphoreGiveFromISR(button2_semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(xButton2Semaphore, &xHigherPriorityTaskWoken);
             break;
         case BUTTON_3:
-            xSemaphoreGiveFromISR(button3_semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(xButton3Semaphore, &xHigherPriorityTaskWoken);
             break;
         default:
             printf("Unexcpected input");
@@ -71,67 +71,67 @@ void button_callback(uint gpio, uint32_t events)
 
 
 /*
- * Blocks on button1_semaphore.
+ * Blocks on xButtono1Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void button1_handler()
+void vButton1Handler()
 {
-    static uint button_pushes = 0;
-    static absolute_time_t end_time = 0;
-    sensor_base base_code = DECIMAL;
-    system_code motor_code = MOTOR_TEMPERATURE;
+    static uint uiPushes = 0;
+    static absolute_time_t xEndTime = 0;
+    sensor_base_e eSensorBase = DECIMAL;
+    system_code_e eMotorCode = MOTOR_TEMPERATURE;
 
     while (true) {
-        if (xSemaphoreTake(button1_semaphore, portMAX_DELAY) == pdTRUE) {
-            // button 1 was pushed
-            end_time = make_timeout_time_ms(2000);
+        xSemaphoreTake(xButton1Semaphore, portMAX_DELAY);
 
-            while (get_absolute_time() < end_time) {
-                // debounce
-                vTaskDelay(175 / portTICK_PERIOD_MS);
-                xSemaphoreTake(button1_semaphore, 0);
-                button_pushes++;
+        // button 1 was pushed
+        xEndTime = make_timeout_time_ms(2000);
 
-                // check for more input
-                if (get_absolute_time() < end_time) {
-                    xSemaphoreTake(button1_semaphore, absolute_time_diff_us(get_absolute_time(), end_time) / 1000 / portTICK_PERIOD_MS);
-                }
+        while (get_absolute_time() < xEndTime) {
+            // debounce
+            vTaskDelay(175 / portTICK_PERIOD_MS);
+            xSemaphoreTake(xButton1Semaphore, 0);
+            uiPushes++;
+
+            // check for more input
+            if (get_absolute_time() < xEndTime) {
+                xSemaphoreTake(xButton1Semaphore, absolute_time_diff_us(get_absolute_time(), xEndTime) / 1000 / portTICK_PERIOD_MS);
             }
-
-            switch (button_pushes) {
-                case 1:
-                    motor_code = MOTOR_TEMPERATURE;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                case 2:
-                    motor_code = MOTOR_HUMIDITY;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                case 3:
-                    if (base_code == DECIMAL) {
-                        base_code = HEXADECIMAL;
-                    } else {
-                        base_code = DECIMAL;
-                    }
-
-                    xQueueOverwrite(sensor_base_queue, &base_code);
-
-                    break;
-                case 4:
-                    error(ERROR_EMERGENCY_STOP);
-                    motor_code = MOTOR_HALT;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                default:
-                    error(ERROR_UNKNOWN_INPUT);
-            }
-
-            // reset pushes counter
-            button_pushes = 0;
         }
+
+        //printf("Button 1 was pushed %d time(s).\n", uiPushes);
+        switch (uiPushes) {
+            case 1:
+                eMotorCode = MOTOR_TEMPERATURE;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                //printf("Move stepper motor on temperature\n");
+                break;
+            case 2:
+                eMotorCode = MOTOR_HUMIDITY;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                //printf("Move stepper motor on humidity\n");
+                break;
+            case 3:
+                if (eSensorBase == DECIMAL) {
+                    eSensorBase = HEXADECIMAL;
+                } else {
+                    eSensorBase = DECIMAL;
+                }
+
+                printf("toggle between\n");
+                xQueueOverwrite(xSensorBaseQueue, &eSensorBase);
+                break;
+            case 4:
+                eMotorCode = MOTOR_HALT;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                printf("Emergency stop stepper motor\n");
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
+
+        // reset pushes counter
+        uiPushes = 0;
 
         taskYIELD();
     }
@@ -139,57 +139,59 @@ void button1_handler()
 
 
 /*
- * Blocks on button2_semaphore.
+ * Blocks on xButtono2Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  * Changes the status of the Stepper Motor based on the button input.
  */
-void button2_handler()
+void vButton2Handler()
 {
-    static uint button_pushes = 0;
-    static absolute_time_t end_time = 0;
-    system_code motor_code = MOTOR_CLOCKWISE;
+    static uint uiPushes = 0;
+    static absolute_time_t xEndTime = 0;
+    system_code_e eMotorCode = MOTOR_CLOCKWISE;
 
     while (true) {
-        if (xSemaphoreTake(button2_semaphore, portMAX_DELAY) == pdTRUE) {
-            // button 2 was pushed
-            end_time = make_timeout_time_ms(2000);
+        xSemaphoreTake(xButton2Semaphore, portMAX_DELAY);
 
-            while (get_absolute_time() < end_time) {
-                // debounce
-                vTaskDelay(175 / portTICK_PERIOD_MS);
-                xSemaphoreTake(button2_semaphore, 0);
-                button_pushes++;
+        // button 2 was pushed
+        xEndTime = make_timeout_time_ms(2000);
 
-                // check for more input
-                if (get_absolute_time() < end_time) {
-                    xSemaphoreTake(button2_semaphore, absolute_time_diff_us(get_absolute_time(), end_time) / 1000 / portTICK_PERIOD_MS);
-                }
+        while (get_absolute_time() < xEndTime) {
+            // debounce
+            vTaskDelay(175 / portTICK_PERIOD_MS);
+            xSemaphoreTake(xButton2Semaphore, 0);
+            uiPushes++;
+
+            // check for more input
+            if (get_absolute_time() < xEndTime) {
+                xSemaphoreTake(xButton2Semaphore, absolute_time_diff_us(get_absolute_time(), xEndTime) / 1000 / portTICK_PERIOD_MS);
             }
-
-            // make decision based on count of pushes
-            switch (button_pushes) {
-                case 1:
-                    motor_code = MOTOR_CLOCKWISE;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                case 2:
-                    motor_code = MOTOR_COUNTERCLOCKWISE;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                case 3:
-                    motor_code = MOTOR_ALTERNATE;
-                    xQueueOverwrite(motor_queue, &motor_code);
-
-                    break;
-                default:
-                    error(ERROR_UNKNOWN_INPUT);
-            }
-
-            // reset pushes counter
-            button_pushes = 0;
         }
+
+        // make decision based on count of pushes
+        switch (uiPushes) {
+            case 1:
+                eMotorCode = MOTOR_CLOCKWISE;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                //printf("Continuously move stepper motor clockwise\n");
+                break;
+            case 2:
+                eMotorCode = MOTOR_COUNTERCLOCKWISE;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                //printf("Continuously move stepper motor counterclockwise\n");
+                break;
+            case 3:
+                eMotorCode = MOTOR_ALTERNATE;
+                xQueueOverwrite(xMotorQueue, &eMotorCode);
+                //printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
+
+        //printf("Button 2 was pushed %d time(s).\n", uiPushes);
+
+        // reset pushes counter
+        uiPushes = 0;
 
         taskYIELD();
     }
@@ -197,52 +199,54 @@ void button2_handler()
 
 
 /*
- * Blocks on button3_semaphore.
+ * Blocks on xButtono3Semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void button3_handler()
+void vButton3Handler()
 {
-    system_code display_code = DISPLAY_TEMPERATURE;
-    static uint button_pushes = 0;
-    static absolute_time_t end_time = 0;
+    int eDisplayCode = DISPLAY_TEMPERATURE;
+    uint uiPushes = 0;
+    TickType_t xEndTime = 0;
 
     while (true) {
-        if (xSemaphoreTake(button3_semaphore, portMAX_DELAY) == pdTRUE) {
-            // button 3 was pushed
-            end_time = make_timeout_time_ms(2000);
+        xSemaphoreTake(xButton3Semaphore, portMAX_DELAY);
 
-            while (get_absolute_time() < end_time) {
-                // debounce
-                vTaskDelay(175 / portTICK_PERIOD_MS);
-                xSemaphoreTake(button3_semaphore, 0);
-                button_pushes++;
+        // button 3 was pushed
+        xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
 
-                // check for more input
-                if (get_absolute_time() < end_time) {
-                    xSemaphoreTake(button3_semaphore, absolute_time_diff_us(get_absolute_time(), end_time) / 1000 / portTICK_PERIOD_MS);
-                }
+        while (xTaskGetTickCount() < xEndTime) {
+            // debounce
+            vTaskDelay(175 / portTICK_PERIOD_MS);
+            xSemaphoreTake(xButton3Semaphore, 0);
+            uiPushes++;
+
+            // check for more input
+            if (xTaskGetTickCount() < xEndTime) {
+                xSemaphoreTake(xButton3Semaphore, xEndTime - xTaskGetTickCount());
             }
-
-            switch(button_pushes) {
-                case 1:
-                    display_code = DISPLAY_TEMPERATURE;
-                    xQueueSend(display_queue, &display_code, 0);
-                    break;
-                case 2:
-                    display_code = DISPLAY_HUMIDITY;
-                    xQueueSend(display_queue, &display_code, 0);
-                    break;
-                case 3:
-                    display_code = MOTOR_STATUS;
-                    xQueueSend(display_queue, &display_code, 0);
-                    break;
-                default:
-                    error(ERROR_UNKNOWN_INPUT);
-            }
-
-            // reset pushes counter
-            button_pushes = 0;
         }
+
+        //printf("Button 3 was pushed %d time(s).\n", uiPushes);
+        switch(uiPushes) {
+            case 1:
+                eDisplayCode = DISPLAY_TEMPERATURE;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                //printf("d\n");
+                break;
+            case 2:
+                eDisplayCode = DISPLAY_HUMIDITY;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                break;
+            case 3:
+                eDisplayCode = MOTOR_STATUS;
+                xQueueSend(xDisplayQueue, &eDisplayCode, 0);
+                break;
+            default:
+                printf("Error: unknown input\n");
+        }
+
+        // reset pushes counter
+        uiPushes = 0;
 
         taskYIELD();
     }

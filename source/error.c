@@ -11,9 +11,9 @@
 
 
 /*
- * Send error code to display_queue.
+ * Send error code to xDisplayQueue.
  */
-void error(system_code error)
+void vError(system_code_e eError)
 {
-    xQueueSendToFront(display_queue, &error, 0);
+    xQueueSendToFront(xDisplayQueue, &eError, 0);
 }

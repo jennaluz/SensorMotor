@@ -12,7 +12,7 @@
 #include <queue.h>
 
 
-extern QueueHandle_t motor_queue;
+extern QueueHandle_t xMotorQueue;
 
 
-void motor_handler();
+void vMotorHandler();

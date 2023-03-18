@@ -18,75 +18,79 @@
 #include "system_code.h"
 
 
-QueueHandle_t motor_queue = NULL;
+QueueHandle_t xMotorQueue = NULL;
 
 
 /*
  * Reads in information from xMotorQueue to control the status of the queue.
  * The status of the queue is defined by the enumeratored eStatus varaible.
  */
-void motor_handler()
+void vMotorHandler()
 {
-    system_code motor_code = MOTOR_CLOCKWISE;
-    system_code motor_status = motor_code;
-    int old_tmp = 70;
-    int new_tmp = 0;
-    int old_hmd = 45;
-    int new_hmd = 0;
+    system_code_e eMotorCode = MOTOR_CLOCKWISE;
+    system_code_e eStatus = eMotorCode;
+    int iOldTmp = 70;
+    int iNewTmp = 0;
+    int iOldHmd = 45;
+    int iNewHmd = 0;
+
+    int i = 0;
+    for (i = 0; i < 100; i++) {
+        printf("%d\n", eMotorCode);
+    }
 
     while (true) {
-        xQueuePeek(motor_queue, &motor_code, 0);
+        xQueuePeek(xMotorQueue, &eMotorCode, 0);
 
-        switch (motor_code) {
+        switch (eMotorCode) {
             case MOTOR_CLOCKWISE:
-                motor_clockwise();
+                vMotorClockwise();
                 break;
             case MOTOR_COUNTERCLOCKWISE:
-                motor_counterclockwise();
+                vMotorCounterclockwise();
                 break;
             case MOTOR_ALTERNATE:
-                motor_alternate();
+                vMotorAlternate();
                 break;
             case MOTOR_TEMPERATURE:
-                xQueuePeek(temperature_queue, &new_tmp, 0);
+                xQueuePeek(xTemperatureQueue, &iNewTmp, 0);
 
-                if (new_tmp == old_tmp) {
-                    motor_halt();
+                if (iNewTmp == iOldTmp) {
+                    vMotorHalt();
                 } else {
-                    if (new_tmp > old_tmp) {
-                        motor_increment();
+                    if (iNewTmp > iOldTmp) {
+                        vMotorIncrement();
                     } else {
-                        motor_decrement();
+                        vMotorDecrement();
                     }
                 }
 
-                old_tmp = new_tmp;
-
+                iOldTmp = iNewTmp;
                 break;
             case MOTOR_HUMIDITY:
-                xQueuePeek(humidity_queue, &new_hmd, 0);
+                xQueuePeek(xHumidityQueue, &iNewHmd, 0);
 
-                if (new_hmd == old_hmd) {
-                    motor_halt();
+                if (iNewHmd == iOldHmd) {
+                    vMotorHalt();
                 } else {
-                    if (new_hmd > old_hmd) {
-                        motor_increment();
+                    if (iNewHmd > iOldHmd) {
+                        vMotorIncrement();
                     } else {
-                        motor_decrement();
+                        vMotorDecrement();
                     }
                 }
 
-                old_hmd = new_hmd;
-
+                iOldHmd = iNewHmd;
                 break;
             case MOTOR_HALT:
-                motor_halt();
-
+                vMotorHalt();
                 break;
             case MOTOR_STATUS:
                 break;
             default:
-                error(ERROR_UNKNOWN_INPUT);
+                vError(ERROR_UNKNOWN_INPUT);
         }
+
+        //vTaskDelay(100);
     }
 }
