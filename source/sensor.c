@@ -29,15 +29,15 @@ QueueHandle_t humidity_queue = NULL;
  */
 void sensor_handler()
 {
-    int iTemperature = 0;
-    int iHumidity = 0;
+    int temperature = 0;
+    int humidity = 0;
 
     while (true) {
-        iTemperature = sensor_read_tmp();
-        xQueueOverwrite(temperature_queue, &iTemperature);
+        temperature = sensor_read_tmp();
+        xQueueOverwrite(temperature_queue, &temperature);
 
-        iHumidity = sensor_read_hmd();
-        xQueueOverwrite(humidity_queue, &iHumidity);
+        humidity = sensor_read_hmd();
+        xQueueOverwrite(humidity_queue, &humidity);
 
         taskYIELD();
     }

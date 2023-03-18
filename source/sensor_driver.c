@@ -46,24 +46,24 @@ void sensor_init()
  */
 float sensor_read_tmp()
 {
-    uint8_t uiTmpValue[2] = {};
-    int8_t iReturn = 0;
-    uint16_t uiReturnValue = 0;
-    float fFahrenheit = 0;
+    uint8_t reg_return[2] = {};
+    int8_t return_bytes = 0;
+    uint16_t return_value = 0;
+    float fahrenheit = 0;
 
     // point to temperature register
-    iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_TMP_REG, 1, false);
+    return_bytes = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_TMP_REG, 1, false);
     vTaskDelay(20);
 
     // read from temperature register
-    iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiTmpValue, 2, false);
-    uiReturnValue = (uiTmpValue[0] << 8) | uiTmpValue[1];
+    return_bytes = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, reg_return, 2, false);
+    return_value = (reg_return[0] << 8) | reg_return[1];
 
     // convert return value to fahrenheit
-    fFahrenheit = (((uiReturnValue / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
+    fahrenheit = (((return_value / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
     //printf("%f degrees F\n", fFahrenheit);
 
-    return fFahrenheit;
+    return fahrenheit;
 }
 
 
@@ -73,23 +73,23 @@ float sensor_read_tmp()
  */
 float sensor_read_hmd()
 {
-    uint8_t uiHmdValue[2] = {};
-    int8_t iReturn = 0;
-    uint16_t uiReturnValue = 0;
-    float fRelativeHumdity = 0;
+    uint8_t reg_value[2] = {};
+    int8_t return_bytes = 0;
+    uint16_t return_value = 0;
+    float relative_humidity = 0;
 
     // point to humidity register
-    iReturn = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_HMD_REG, 1, false);
+    return_bytes = i2c_write_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, &HDC_HMD_REG, 1, false);
     vTaskDelay(20);
 
     // read from humidity register
-    iReturn = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, uiHmdValue, 2, false);
-    uiReturnValue = (uiHmdValue[0] << 8) | uiHmdValue[1];
+    return_bytes = i2c_read_blocking(PICO_DEFAULT_I2C_INSTANCE, HDC_ADDR, reg_value, 2, false);
+    return_value = (reg_value[0] << 8) | reg_value[1];
 
     // convert return value to relative humidity
-    fRelativeHumdity = (uiReturnValue / pow(2, 16)) * 100;
+    relative_humidity = (return_value / pow(2, 16)) * 100;
     //printf("RH %f\n", fRelativeHumdity);
 
     // return relative humidity
-    return fRelativeHumdity;
+    return relative_humidity;
 }
