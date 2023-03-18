@@ -76,8 +76,8 @@ void vButtonCallback(uint gpio, uint32_t events)
  */
 void vButton1Handler()
 {
-    static uint uiPushes = 0;
-    static absolute_time_t xEndTime = 0;
+    TickType_t xEndTime = 0;
+    uint uiPushes = 0;
     sensor_base_e eSensorBase = DECIMAL;
     system_code_e eMotorCode = MOTOR_TEMPERATURE;
 
@@ -85,17 +85,17 @@ void vButton1Handler()
         xSemaphoreTake(xButton1Semaphore, portMAX_DELAY);
 
         // button 1 was pushed
-        xEndTime = make_timeout_time_ms(2000);
+        xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
 
-        while (get_absolute_time() < xEndTime) {
+        while (xTaskGetTickCount() < xEndTime) {
             // debounce
             vTaskDelay(175 / portTICK_PERIOD_MS);
             xSemaphoreTake(xButton1Semaphore, 0);
             uiPushes++;
 
             // check for more input
-            if (get_absolute_time() < xEndTime) {
-                xSemaphoreTake(xButton1Semaphore, absolute_time_diff_us(get_absolute_time(), xEndTime) / 1000 / portTICK_PERIOD_MS);
+            if (xTaskGetTickCount() < xEndTime) {
+                xSemaphoreTake(xButton1Semaphore, xEndTime - xTaskGetTickCount());
             }
         }
 
@@ -145,25 +145,25 @@ void vButton1Handler()
  */
 void vButton2Handler()
 {
-    static uint uiPushes = 0;
-    static absolute_time_t xEndTime = 0;
+    TickType_t xEndTime = 0;
+    uint uiPushes = 0;
     system_code_e eMotorCode = MOTOR_CLOCKWISE;
 
     while (true) {
         xSemaphoreTake(xButton2Semaphore, portMAX_DELAY);
 
         // button 2 was pushed
-        xEndTime = make_timeout_time_ms(2000);
+        xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
 
-        while (get_absolute_time() < xEndTime) {
+        while (xTaskGetTickCount() < xEndTime) {
             // debounce
             vTaskDelay(175 / portTICK_PERIOD_MS);
             xSemaphoreTake(xButton2Semaphore, 0);
             uiPushes++;
 
             // check for more input
-            if (get_absolute_time() < xEndTime) {
-                xSemaphoreTake(xButton2Semaphore, absolute_time_diff_us(get_absolute_time(), xEndTime) / 1000 / portTICK_PERIOD_MS);
+            if (xTaskGetTickCount() < xEndTime) {
+                xSemaphoreTake(xButton2Semaphore, xEndTime - xTaskGetTickCount());
             }
         }
 
@@ -204,9 +204,9 @@ void vButton2Handler()
  */
 void vButton3Handler()
 {
-    int eDisplayCode = DISPLAY_TEMPERATURE;
-    uint uiPushes = 0;
     TickType_t xEndTime = 0;
+    uint uiPushes = 0;
+    system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
 
     while (true) {
         xSemaphoreTake(xButton3Semaphore, portMAX_DELAY);

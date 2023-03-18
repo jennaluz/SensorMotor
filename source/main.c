@@ -20,6 +20,7 @@
 #include "motor_driver.h"
 #include "sensor.h"
 #include "sensor_driver.h"
+#include "system_code.h"
 
 
 int main()
@@ -39,7 +40,7 @@ int main()
     xDisplaySemaphore = xSemaphoreCreateBinary();
 
     // create queues
-    xDisplayQueue = xQueueCreate(10, sizeof(int));
+    xDisplayQueue = xQueueCreate(10, sizeof(system_code_e));
     xLeftDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
     xRightDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
     xMotorQueue = xQueueCreate(1, sizeof(int));
