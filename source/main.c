@@ -34,9 +34,9 @@ int main()
     vButtonIRQInit();
 
     // create semaphores
-    xButton1Semaphore = xSemaphoreCreateBinary();
-    xButton2Semaphore = xSemaphoreCreateBinary();
-    xButton3Semaphore = xSemaphoreCreateBinary();
+    button1_semaphore = xSemaphoreCreateBinary();
+    button2_semaphore = xSemaphoreCreateBinary();
+    button3_semaphore = xSemaphoreCreateBinary();
     xDisplaySemaphore = xSemaphoreCreateBinary();
 
     // create queues

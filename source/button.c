@@ -25,9 +25,9 @@
 #include "system_code.h"
 
 
-SemaphoreHandle_t xButton1Semaphore = NULL;
-SemaphoreHandle_t xButton2Semaphore = NULL;
-SemaphoreHandle_t xButton3Semaphore = NULL;
+SemaphoreHandle_t button1_semaphore = NULL;
+SemaphoreHandle_t button2_semaphore = NULL;
+SemaphoreHandle_t button3_semaphore = NULL;
 
 const uint BUTTON_1 = 19;
 const uint BUTTON_2 = 9;
@@ -54,13 +54,13 @@ void vButtonCallback(uint gpio, uint32_t events)
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     switch (gpio) {
         case BUTTON_1:
-            xSemaphoreGiveFromISR(xButton1Semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(button1_semaphore, &xHigherPriorityTaskWoken);
             break;
         case BUTTON_2:
-            xSemaphoreGiveFromISR(xButton2Semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(button2_semaphore, &xHigherPriorityTaskWoken);
             break;
         case BUTTON_3:
-            xSemaphoreGiveFromISR(xButton3Semaphore, &xHigherPriorityTaskWoken);
+            xSemaphoreGiveFromISR(button3_semaphore, &xHigherPriorityTaskWoken);
             break;
         default:
             printf("Unexcpected input");
@@ -71,7 +71,7 @@ void vButtonCallback(uint gpio, uint32_t events)
 
 
 /*
- * Blocks on xButtono1Semaphore.
+ * Blocks on button1_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
 void vButton1Handler()
@@ -82,7 +82,7 @@ void vButton1Handler()
     system_code_e eMotorCode = MOTOR_TEMPERATURE;
 
     while (true) {
-        xSemaphoreTake(xButton1Semaphore, portMAX_DELAY);
+        xSemaphoreTake(button1_semaphore, portMAX_DELAY);
 
         // button 1 was pushed
         xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
@@ -90,12 +90,12 @@ void vButton1Handler()
         while (xTaskGetTickCount() < xEndTime) {
             // debounce
             vTaskDelay(175 / portTICK_PERIOD_MS);
-            xSemaphoreTake(xButton1Semaphore, 0);
+            xSemaphoreTake(button1_semaphore, 0);
             uiPushes++;
 
             // check for more input
             if (xTaskGetTickCount() < xEndTime) {
-                xSemaphoreTake(xButton1Semaphore, xEndTime - xTaskGetTickCount());
+                xSemaphoreTake(button1_semaphore, xEndTime - xTaskGetTickCount());
             }
         }
 
@@ -139,7 +139,7 @@ void vButton1Handler()
 
 
 /*
- * Blocks on xButtono2Semaphore.
+ * Blocks on button2_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  * Changes the status of the Stepper Motor based on the button input.
  */
@@ -150,7 +150,7 @@ void vButton2Handler()
     system_code_e eMotorCode = MOTOR_CLOCKWISE;
 
     while (true) {
-        xSemaphoreTake(xButton2Semaphore, portMAX_DELAY);
+        xSemaphoreTake(button2_semaphore, portMAX_DELAY);
 
         // button 2 was pushed
         xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
@@ -158,12 +158,12 @@ void vButton2Handler()
         while (xTaskGetTickCount() < xEndTime) {
             // debounce
             vTaskDelay(175 / portTICK_PERIOD_MS);
-            xSemaphoreTake(xButton2Semaphore, 0);
+            xSemaphoreTake(button2_semaphore, 0);
             uiPushes++;
 
             // check for more input
             if (xTaskGetTickCount() < xEndTime) {
-                xSemaphoreTake(xButton2Semaphore, xEndTime - xTaskGetTickCount());
+                xSemaphoreTake(button2_semaphore, xEndTime - xTaskGetTickCount());
             }
         }
 
@@ -199,7 +199,7 @@ void vButton2Handler()
 
 
 /*
- * Blocks on xButtono3Semaphore.
+ * Blocks on button3_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
 void vButton3Handler()
@@ -209,7 +209,7 @@ void vButton3Handler()
     system_code_e eDisplayCode = DISPLAY_TEMPERATURE;
 
     while (true) {
-        xSemaphoreTake(xButton3Semaphore, portMAX_DELAY);
+        xSemaphoreTake(button3_semaphore, portMAX_DELAY);
 
         // button 3 was pushed
         xEndTime = xTaskGetTickCount() + 2 * configTICK_RATE_HZ;
@@ -217,12 +217,12 @@ void vButton3Handler()
         while (xTaskGetTickCount() < xEndTime) {
             // debounce
             vTaskDelay(175 / portTICK_PERIOD_MS);
-            xSemaphoreTake(xButton3Semaphore, 0);
+            xSemaphoreTake(button3_semaphore, 0);
             uiPushes++;
 
             // check for more input
             if (xTaskGetTickCount() < xEndTime) {
-                xSemaphoreTake(xButton3Semaphore, xEndTime - xTaskGetTickCount());
+                xSemaphoreTake(button3_semaphore, xEndTime - xTaskGetTickCount());
             }
         }
 

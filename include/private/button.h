@@ -16,9 +16,9 @@
 #include <pico/stdlib.h>
 
 
-extern SemaphoreHandle_t xButton1Semaphore;
-extern SemaphoreHandle_t xButton2Semaphore;
-extern SemaphoreHandle_t xButton3Semaphore;
+extern SemaphoreHandle_t button1_semaphore;
+extern SemaphoreHandle_t button2_semaphore;
+extern SemaphoreHandle_t button3_semaphore;
 
 
 void vButtonIRQInit();
