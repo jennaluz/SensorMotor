@@ -30,7 +30,7 @@ int main()
     // initialize stepper motor gpio pins
     vDisplayInit();
     motor_init();
-    vSensorInit();
+    sensor_init();
     button_irq_init();
 
     // create semaphores

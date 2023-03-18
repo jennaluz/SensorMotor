@@ -9,6 +9,6 @@
 #pragma once
 
 
-void vSensorInit();
-float fSensorReadTmp();
-float fSensorReadHmd();
+void sensor_init();
+float sensor_read_tmp();
+float sensor_read_hmd();

@@ -28,7 +28,7 @@ const uint8_t HDC_CONFIG_REG    = 0x02;
 /*
  * Initialize I2C port, and SDA and SCL pins.
  */
-void vSensorInit()
+void sensor_init()
 {
     // initialize default port on default SDA and SCL pins
     i2c_init(PICO_DEFAULT_I2C_INSTANCE, 100 * 1000);    // put I2C hardware into known state and enable
@@ -44,7 +44,7 @@ void vSensorInit()
  * Reads in the HDC1080 temperature register.
  * Converts value into degrees fahrenheit and returns that value.
  */
-float fSensorReadTmp()
+float sensor_read_tmp()
 {
     uint8_t uiTmpValue[2] = {};
     int8_t iReturn = 0;
@@ -71,7 +71,7 @@ float fSensorReadTmp()
  * Reads in the HDC1080 humidity register.
  * Converts value into relative humditiy.
  */
-float fSensorReadHmd()
+float sensor_read_hmd()
 {
     uint8_t uiHmdValue[2] = {};
     int8_t iReturn = 0;

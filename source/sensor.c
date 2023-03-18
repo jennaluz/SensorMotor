@@ -33,10 +33,10 @@ void vSensorHandler()
     int iHumidity = 0;
 
     while (true) {
-        iTemperature = fSensorReadTmp();
+        iTemperature = sensor_read_tmp();
         xQueueOverwrite(temperature_queue, &iTemperature);
 
-        iHumidity = fSensorReadHmd();
+        iHumidity = sensor_read_hmd();
         xQueueOverwrite(humidity_queue, &iHumidity);
 
         taskYIELD();
