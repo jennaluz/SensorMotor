@@ -21,6 +21,7 @@
 QueueHandle_t display_queue = NULL;
 QueueHandle_t left_display_queue = NULL;
 QueueHandle_t right_display_queue = NULL;
+QueueHandle_t sensor_base_queue = NULL;
 SemaphoreHandle_t display_semaphore = NULL;
 
 

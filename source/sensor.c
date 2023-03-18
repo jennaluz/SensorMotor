@@ -18,7 +18,6 @@
 #include "sensor_driver.h"
 
 
-QueueHandle_t sensor_base_queue = NULL;
 QueueHandle_t temperature_queue = NULL;
 QueueHandle_t humidity_queue = NULL;
 

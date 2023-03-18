@@ -10,7 +10,6 @@
 #include <queue.h>
 
 
-extern QueueHandle_t sensor_base_queue;
 extern QueueHandle_t temperature_queue;
 extern QueueHandle_t humidity_queue;
 
