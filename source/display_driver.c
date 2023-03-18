@@ -56,9 +56,9 @@ void display_reset()
     gpio_put(PIN_DP, 0);
 }
 
-void display_value(int config)
+void display_value(int pin_config)
 {
-    switch(config) {
+    switch(pin_config) {
         case 0:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);

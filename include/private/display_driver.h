@@ -27,4 +27,4 @@ typedef enum display_pinout_e {
 
 void display_init();
 void display_reset();
-void display_value(int config);
+void display_value(int pin_config);
