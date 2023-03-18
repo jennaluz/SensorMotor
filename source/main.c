@@ -37,7 +37,7 @@ int main()
     button1_semaphore = xSemaphoreCreateBinary();
     button2_semaphore = xSemaphoreCreateBinary();
     button3_semaphore = xSemaphoreCreateBinary();
-    xDisplaySemaphore = xSemaphoreCreateBinary();
+    display_semaphore = xSemaphoreCreateBinary();
 
     // create queues
     xDisplayQueue = xQueueCreate(10, sizeof(system_code_e));
@@ -59,7 +59,7 @@ int main()
     xTaskCreate(sensor_handler, "HDC1080 Handler", 256, NULL, 3, NULL);
 
     // give display semaphore
-    xSemaphoreGive(xDisplaySemaphore);
+    xSemaphoreGive(display_semaphore);
 
     vTaskStartScheduler();
 

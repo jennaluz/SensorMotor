@@ -21,7 +21,7 @@
 QueueHandle_t xDisplayQueue = NULL;
 QueueHandle_t xLeftDisplayQueue = NULL;
 QueueHandle_t xRightDisplayQueue = NULL;
-SemaphoreHandle_t xDisplaySemaphore = NULL;
+SemaphoreHandle_t display_semaphore = NULL;
 
 enum display_index_e {
     DISPLAY_C = 12,
@@ -122,7 +122,7 @@ void vLeftDisplayHandler()
     uint8_t uiMask = 0x01;
 
     while (true) {
-        if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
+        if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
             xQueueReceive(xLeftDisplayQueue, &uiPinConfig, 0);
             //printf("L%d\n", uiPinConfig);
             gpio_put(PIN_CC2, 1);
@@ -130,7 +130,7 @@ void vLeftDisplayHandler()
             vConfigDisplay(uiPinConfig);
 
             gpio_put(PIN_CC1, 0);
-            xSemaphoreGive(xDisplaySemaphore);
+            xSemaphoreGive(display_semaphore);
         }
 
         taskYIELD();
@@ -148,7 +148,7 @@ void vRightDisplayHandler()
     uint8_t uiMask = 0x01;
 
     while (true) {
-        if (xSemaphoreTake(xDisplaySemaphore, 0) == pdTRUE) {
+        if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
             xQueueReceive(xRightDisplayQueue, &uiPinConfig, 0);
             //printf("R%d\n", uiPinConfig);
             gpio_put(PIN_CC1, 1);
@@ -156,7 +156,7 @@ void vRightDisplayHandler()
             vConfigDisplay(uiPinConfig);
 
             gpio_put(PIN_CC2, 0);
-            xSemaphoreGive(xDisplaySemaphore);
+            xSemaphoreGive(display_semaphore);
         }
 
         taskYIELD();
