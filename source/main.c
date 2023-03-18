@@ -31,7 +31,7 @@ int main()
     vDisplayInit();
     vMotorInit();
     vSensorInit();
-    vButtonIRQInit();
+    button_irq_init();
 
     // create semaphores
     button1_semaphore = xSemaphoreCreateBinary();
@@ -49,9 +49,9 @@ int main()
     xHumidityQueue = xQueueCreate(1, sizeof(int));
 
     // create tasks
-    xTaskCreate(vButton1Handler, "Button 1", 256, NULL, 4, NULL);
-    xTaskCreate(vButton2Handler, "Button 2", 256, NULL, 4, NULL);
-    xTaskCreate(vButton3Handler, "Button 3", 256, NULL, 4, NULL);
+    xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);
+    xTaskCreate(button2_handler, "Button 2", 256, NULL, 4, NULL);
+    xTaskCreate(button3_handler, "Button 3", 256, NULL, 4, NULL);
     xTaskCreate(vDisplayHandler, "Display", 256, NULL, 3, NULL);
     xTaskCreate(vLeftDisplayHandler, "Left Display", 256, NULL, 3, NULL);
     xTaskCreate(vRightDisplayHandler, "Right Display", 256, NULL, 3, NULL);

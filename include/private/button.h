@@ -21,8 +21,8 @@ extern SemaphoreHandle_t button2_semaphore;
 extern SemaphoreHandle_t button3_semaphore;
 
 
-void vButtonIRQInit();
-void vButtonCallback(uint gpio, uint32_t events);
-void vButton1Handler();
-void vButton2Handler();
-void vButton3Handler();
+void button_irq_init();
+void button_callback(uint gpio, uint32_t events);
+void button1_handler();
+void button2_handler();
+void button3_handler();

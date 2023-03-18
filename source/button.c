@@ -38,9 +38,9 @@ const uint BUTTON_3 = 8;
  * Initializes interrupt requests for each buttons.
  * Each event calls the vButtonCallback() function.
  */
-void vButtonIRQInit()
+void button_irq_init()
 {
-    gpio_set_irq_enabled_with_callback(BUTTON_1, GPIO_IRQ_EDGE_RISE, true, vButtonCallback);
+    gpio_set_irq_enabled_with_callback(BUTTON_1, GPIO_IRQ_EDGE_RISE, true, button_callback);
     gpio_set_irq_enabled(BUTTON_2, GPIO_IRQ_EDGE_RISE, true);
     gpio_set_irq_enabled(BUTTON_3, GPIO_IRQ_EDGE_RISE, true);
 }
@@ -49,7 +49,7 @@ void vButtonIRQInit()
 /*
  * Gives the semaphore corresponding to the button that was pushed.
  */
-void vButtonCallback(uint gpio, uint32_t events)
+void button_callback(uint gpio, uint32_t events)
 {
     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     switch (gpio) {
@@ -74,7 +74,7 @@ void vButtonCallback(uint gpio, uint32_t events)
  * Blocks on button1_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void vButton1Handler()
+void button1_handler()
 {
     TickType_t xEndTime = 0;
     uint uiPushes = 0;
@@ -143,7 +143,7 @@ void vButton1Handler()
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  * Changes the status of the Stepper Motor based on the button input.
  */
-void vButton2Handler()
+void button2_handler()
 {
     TickType_t xEndTime = 0;
     uint uiPushes = 0;
@@ -202,7 +202,7 @@ void vButton2Handler()
  * Blocks on button3_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void vButton3Handler()
+void button3_handler()
 {
     TickType_t xEndTime = 0;
     uint uiPushes = 0;
