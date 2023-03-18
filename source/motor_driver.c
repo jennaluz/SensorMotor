@@ -17,7 +17,7 @@ const uint COIL_1         = 12;
 const uint COIL_2         = 13;
 const uint COIL_3         = 6;
 const uint COIL_4         = 0;
-const uint REV_STEPS      = 525; // revolutions per step
+const uint REV_STEPS      = 250; // revolutions per step
 const uint INTERVAL_STEPS = 10;
 
 
@@ -58,31 +58,6 @@ void vMotorClockwise()
     // reset motor gpio pins
     vMotorReset();
 
-    gpio_put(COIL_4, 1);    // 0001
-    vTaskDelay(1);
-    gpio_put(COIL_3, 1);    // 0011
-    vTaskDelay(1);
-    gpio_put(COIL_4, 0);    // 0010
-    vTaskDelay(1);
-    gpio_put(COIL_2, 1);    // 0110
-    vTaskDelay(1);
-    gpio_put(COIL_3, 0);    // 0100
-    vTaskDelay(1);
-    gpio_put(COIL_1, 1);    // 1100
-    vTaskDelay(1);
-    gpio_put(COIL_2, 0);    // 1000
-    vTaskDelay(1);
-    gpio_put(COIL_4, 1);    // 1001
-}
-
-/*
- * Execute 8-step counterclockwise sequence.
- */
-void vMotorCounterclockwise()
-{
-    // reset motor gpio pins
-    vMotorReset();
-
     gpio_put(COIL_4, 1);
     gpio_put(COIL_1, 1);    // 1001
     vTaskDelay(1);
@@ -99,6 +74,31 @@ void vMotorCounterclockwise()
     gpio_put(COIL_4, 1);    // 0011
     vTaskDelay(1);
     gpio_put(COIL_3, 0);    // 0011
+}
+
+/*
+ * Execute 8-step counterclockwise sequence.
+ */
+void vMotorCounterclockwise()
+{
+    // reset motor gpio pins
+    vMotorReset();
+
+    gpio_put(COIL_4, 1);    // 0001
+    vTaskDelay(1);
+    gpio_put(COIL_3, 1);    // 0011
+    vTaskDelay(1);
+    gpio_put(COIL_4, 0);    // 0010
+    vTaskDelay(1);
+    gpio_put(COIL_2, 1);    // 0110
+    vTaskDelay(1);
+    gpio_put(COIL_3, 0);    // 0100
+    vTaskDelay(1);
+    gpio_put(COIL_1, 1);    // 1100
+    vTaskDelay(1);
+    gpio_put(COIL_2, 0);    // 1000
+    vTaskDelay(1);
+    gpio_put(COIL_4, 1);    // 1001
 }
 
 /*
