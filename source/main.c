@@ -29,7 +29,7 @@ int main()
 
     // initialize stepper motor gpio pins
     vDisplayInit();
-    vMotorInit();
+    motor_init();
     vSensorInit();
     button_irq_init();
 

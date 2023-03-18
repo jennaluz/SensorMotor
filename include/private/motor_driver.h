@@ -12,11 +12,11 @@
 #include <pico/stdlib.h>
 
 
-void vMotorInit();
-void vMotorReset();
-void vMotorClockwise();
-void vMotorCounterclockwise();
-void vMotorAlternate();
-void vMotorHalt();
-void vMotorIncrement();
-void vMotorDecrement();
+void motor_init();
+void motor_reset();
+void motor_clockwise();
+void motor_counterclockwise();
+void motor_alternate();
+void motor_halt();
+void motor_increment();
+void motor_decrement();

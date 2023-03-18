@@ -39,24 +39,24 @@ void motor_handle()
 
         switch (motor_code) {
             case MOTOR_CLOCKWISE:
-                vMotorClockwise();
+                motor_clockwise();
                 break;
             case MOTOR_COUNTERCLOCKWISE:
-                vMotorCounterclockwise();
+                motor_counterclockwise();
                 break;
             case MOTOR_ALTERNATE:
-                vMotorAlternate();
+                motor_alternate();
                 break;
             case MOTOR_TEMPERATURE:
                 xQueuePeek(xTemperatureQueue, &new_tmp, 0);
 
                 if (new_tmp == old_tmp) {
-                    vMotorHalt();
+                    motor_halt();
                 } else {
                     if (new_tmp > old_tmp) {
-                        vMotorIncrement();
+                        motor_increment();
                     } else {
-                        vMotorDecrement();
+                        motor_decrement();
                     }
                 }
 
@@ -66,19 +66,19 @@ void motor_handle()
                 xQueuePeek(xHumidityQueue, &new_hmd, 0);
 
                 if (new_hmd == old_hmd) {
-                    vMotorHalt();
+                    motor_halt();
                 } else {
                     if (new_hmd > old_hmd) {
-                        vMotorIncrement();
+                        motor_increment();
                     } else {
-                        vMotorDecrement();
+                        motor_decrement();
                     }
                 }
 
                 old_hmd = new_hmd;
                 break;
             case MOTOR_HALT:
-                vMotorHalt();
+                motor_halt();
                 break;
             case MOTOR_STATUS:
                 break;
