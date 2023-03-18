@@ -20,4 +20,4 @@ typedef enum sensor_base_e {
 } sensor_base_e;
 
 
-void vSensorHandler();
+void sensor_handler();

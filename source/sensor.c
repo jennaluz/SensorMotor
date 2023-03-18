@@ -27,7 +27,7 @@ QueueHandle_t humidity_queue = NULL;
  * Reads in temperature and humidity values from HDC1080.
  * Overwrites the corresponding queue to send the most up to date value.
  */
-void vSensorHandler()
+void sensor_handler()
 {
     int iTemperature = 0;
     int iHumidity = 0;

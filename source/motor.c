@@ -25,7 +25,7 @@ QueueHandle_t motor_queue = NULL;
  * Reads in information from motor_queue to control the status of the queue.
  * The status of the queue is defined by the enumeratored eStatus varaible.
  */
-void motor_handle()
+void motor_handler()
 {
     system_code_e motor_code = MOTOR_CLOCKWISE;
     system_code_e motor_status = motor_code;
