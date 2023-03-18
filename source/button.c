@@ -103,12 +103,12 @@ void button1_handler()
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_TEMPERATURE;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 //printf("Move stepper motor on temperature\n");
                 break;
             case 2:
                 motor_code = MOTOR_HUMIDITY;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 //printf("Move stepper motor on humidity\n");
                 break;
             case 3:
@@ -123,7 +123,7 @@ void button1_handler()
                 break;
             case 4:
                 motor_code = MOTOR_HALT;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 printf("Emergency stop stepper motor\n");
                 break;
             default:
@@ -171,17 +171,17 @@ void button2_handler()
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_CLOCKWISE;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 //printf("Continuously move stepper motor clockwise\n");
                 break;
             case 2:
                 motor_code = MOTOR_COUNTERCLOCKWISE;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 //printf("Continuously move stepper motor counterclockwise\n");
                 break;
             case 3:
                 motor_code = MOTOR_ALTERNATE;
-                xQueueOverwrite(xMotorQueue, &motor_code);
+                xQueueOverwrite(motor_queue, &motor_code);
                 //printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
                 break;
             default:

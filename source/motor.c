@@ -1,7 +1,7 @@
 /*
  * SensorMotor/source/motor.c
  *
- * Controls the Stepper Motor status based on xMotorQueue values.
+ * Controls the Stepper Motor status based on motor_queue values.
  */
 
 
@@ -18,11 +18,11 @@
 #include "system_code.h"
 
 
-QueueHandle_t xMotorQueue = NULL;
+QueueHandle_t motor_queue = NULL;
 
 
 /*
- * Reads in information from xMotorQueue to control the status of the queue.
+ * Reads in information from motor_queue to control the status of the queue.
  * The status of the queue is defined by the enumeratored eStatus varaible.
  */
 void vMotorHandler()
@@ -40,7 +40,7 @@ void vMotorHandler()
     }
 
     while (true) {
-        xQueuePeek(xMotorQueue, &eMotorCode, 0);
+        xQueuePeek(motor_queue, &eMotorCode, 0);
 
         switch (eMotorCode) {
             case MOTOR_CLOCKWISE:
