@@ -107,10 +107,9 @@ void left_display_handler()
             xQueueReceive(left_display_queue, &pin_config, 0);
             //printf("L%d\n", uiPinConfig);
             gpio_put(PIN_CC2, 1);
-            display_reset();
             display_value(pin_config);
-
             gpio_put(PIN_CC1, 0);
+
             xSemaphoreGive(display_semaphore);
         }
 
@@ -132,10 +131,9 @@ void right_display_handler()
             xQueueReceive(right_display_queue, &pin_config, 0);
 
             gpio_put(PIN_CC1, 1);
-            display_reset();
             display_value(pin_config);
-
             gpio_put(PIN_CC2, 0);
+
             xSemaphoreGive(display_semaphore);
         }
 

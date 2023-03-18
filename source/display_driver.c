@@ -58,6 +58,8 @@ void display_reset()
 
 void display_value(int pin_config)
 {
+    display_reset();
+
     switch(pin_config) {
         case 0:
             gpio_put(PIN_A, 1);
