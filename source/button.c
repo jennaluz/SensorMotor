@@ -119,7 +119,7 @@ void button1_handler()
                 }
 
                 printf("toggle between\n");
-                xQueueOverwrite(xSensorBaseQueue, &base_code);
+                xQueueOverwrite(sensor_base_queue, &base_code);
                 break;
             case 4:
                 motor_code = MOTOR_HALT;

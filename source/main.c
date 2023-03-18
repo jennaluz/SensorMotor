@@ -43,10 +43,10 @@ int main()
     xDisplayQueue = xQueueCreate(10, sizeof(system_code_e));
     xLeftDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
     xRightDisplayQueue = xQueueCreate(1, sizeof(uint8_t));
-    motor_queue = xQueueCreate(1, sizeof(int));
-    xSensorBaseQueue = xQueueCreate(1, sizeof(int));
-    xTemperatureQueue = xQueueCreate(1, sizeof(int));
-    xHumidityQueue = xQueueCreate(1, sizeof(int));
+    motor_queue = xQueueCreate(1, sizeof(system_code_e));
+    sensor_base_queue = xQueueCreate(1, sizeof(sensor_base_e));
+    temperature_queue = xQueueCreate(1, sizeof(int));
+    humidity_queue = xQueueCreate(1, sizeof(int));
 
     // create tasks
     xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);

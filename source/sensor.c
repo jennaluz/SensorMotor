@@ -18,9 +18,9 @@
 #include "sensor_driver.h"
 
 
-QueueHandle_t xSensorBaseQueue = NULL;
-QueueHandle_t xTemperatureQueue = NULL;
-QueueHandle_t xHumidityQueue = NULL;
+QueueHandle_t sensor_base_queue = NULL;
+QueueHandle_t temperature_queue = NULL;
+QueueHandle_t humidity_queue = NULL;
 
 
 /*
@@ -29,16 +29,15 @@ QueueHandle_t xHumidityQueue = NULL;
  */
 void vSensorHandler()
 {
-    //sensor_base_e eBase = DECIMAL;
     int iTemperature = 0;
     int iHumidity = 0;
 
     while (true) {
         iTemperature = fSensorReadTmp();
-        xQueueOverwrite(xTemperatureQueue, &iTemperature);
+        xQueueOverwrite(temperature_queue, &iTemperature);
 
         iHumidity = fSensorReadHmd();
-        xQueueOverwrite(xHumidityQueue, &iHumidity);
+        xQueueOverwrite(humidity_queue, &iHumidity);
 
         taskYIELD();
     }

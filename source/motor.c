@@ -48,7 +48,7 @@ void motor_handle()
                 motor_alternate();
                 break;
             case MOTOR_TEMPERATURE:
-                xQueuePeek(xTemperatureQueue, &new_tmp, 0);
+                xQueuePeek(temperature_queue, &new_tmp, 0);
 
                 if (new_tmp == old_tmp) {
                     motor_halt();
@@ -63,7 +63,7 @@ void motor_handle()
                 old_tmp = new_tmp;
                 break;
             case MOTOR_HUMIDITY:
-                xQueuePeek(xHumidityQueue, &new_hmd, 0);
+                xQueuePeek(humidity_queue, &new_hmd, 0);
 
                 if (new_hmd == old_hmd) {
                     motor_halt();

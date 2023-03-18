@@ -56,8 +56,8 @@ void vDisplayHandler()
 
         switch (eDisplayCode) {
             case DISPLAY_TEMPERATURE:
-                xQueuePeek(xSensorBaseQueue, &eSensorBase, 0);
-                xQueuePeek(xTemperatureQueue, &iTemperature, 0);
+                xQueuePeek(sensor_base_queue, &eSensorBase, 0);
+                xQueuePeek(temperature_queue, &iTemperature, 0);
 
                 if (eSensorBase == DECIMAL) {
                     sensor_digit[0] = iTemperature / 10;
@@ -76,8 +76,8 @@ void vDisplayHandler()
 
                 break;
             case DISPLAY_HUMIDITY:
-                xQueuePeek(xSensorBaseQueue, &eSensorBase, 0);
-                xQueuePeek(xHumidityQueue, &iHumidity, 0);
+                xQueuePeek(sensor_base_queue, &eSensorBase, 0);
+                xQueuePeek(humidity_queue, &iHumidity, 0);
 
                 if (eSensorBase == DECIMAL) {
                     sensor_digit[0] = iHumidity / 10;
