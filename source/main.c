@@ -55,7 +55,7 @@ int main()
     xTaskCreate(vDisplayHandler, "Display", 256, NULL, 3, NULL);
     xTaskCreate(vLeftDisplayHandler, "Left Display", 256, NULL, 3, NULL);
     xTaskCreate(vRightDisplayHandler, "Right Display", 256, NULL, 3, NULL);
-    xTaskCreate(vMotorHandler, "Stepper Motor Handler", 256, NULL, 3, NULL);
+    xTaskCreate(motor_handle, "Stepper Motor Handler", 256, NULL, 3, NULL);
     xTaskCreate(vSensorHandler, "HDC1080 Handler", 256, NULL, 3, NULL);
 
     // give display semaphore

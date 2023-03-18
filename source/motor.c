@@ -25,24 +25,19 @@ QueueHandle_t motor_queue = NULL;
  * Reads in information from motor_queue to control the status of the queue.
  * The status of the queue is defined by the enumeratored eStatus varaible.
  */
-void vMotorHandler()
+void motor_handle()
 {
-    system_code_e eMotorCode = MOTOR_CLOCKWISE;
-    system_code_e eStatus = eMotorCode;
-    int iOldTmp = 70;
-    int iNewTmp = 0;
-    int iOldHmd = 45;
-    int iNewHmd = 0;
-
-    int i = 0;
-    for (i = 0; i < 100; i++) {
-        printf("%d\n", eMotorCode);
-    }
+    system_code_e motor_code = MOTOR_CLOCKWISE;
+    system_code_e motor_status = motor_code;
+    int old_tmp = 70;
+    int new_tmp = 0;
+    int old_hmd = 45;
+    int new_hmd = 0;
 
     while (true) {
-        xQueuePeek(motor_queue, &eMotorCode, 0);
+        xQueuePeek(motor_queue, &motor_code, 0);
 
-        switch (eMotorCode) {
+        switch (motor_code) {
             case MOTOR_CLOCKWISE:
                 vMotorClockwise();
                 break;
@@ -53,34 +48,34 @@ void vMotorHandler()
                 vMotorAlternate();
                 break;
             case MOTOR_TEMPERATURE:
-                xQueuePeek(xTemperatureQueue, &iNewTmp, 0);
+                xQueuePeek(xTemperatureQueue, &new_tmp, 0);
 
-                if (iNewTmp == iOldTmp) {
+                if (new_tmp == old_tmp) {
                     vMotorHalt();
                 } else {
-                    if (iNewTmp > iOldTmp) {
+                    if (new_tmp > old_tmp) {
                         vMotorIncrement();
                     } else {
                         vMotorDecrement();
                     }
                 }
 
-                iOldTmp = iNewTmp;
+                old_tmp = new_tmp;
                 break;
             case MOTOR_HUMIDITY:
-                xQueuePeek(xHumidityQueue, &iNewHmd, 0);
+                xQueuePeek(xHumidityQueue, &new_hmd, 0);
 
-                if (iNewHmd == iOldHmd) {
+                if (new_hmd == old_hmd) {
                     vMotorHalt();
                 } else {
-                    if (iNewHmd > iOldHmd) {
+                    if (new_hmd > old_hmd) {
                         vMotorIncrement();
                     } else {
                         vMotorDecrement();
                     }
                 }
 
-                iOldHmd = iNewHmd;
+                old_hmd = new_hmd;
                 break;
             case MOTOR_HALT:
                 vMotorHalt();
