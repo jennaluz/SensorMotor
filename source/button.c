@@ -131,7 +131,8 @@ void button1_handler()
 
                 break;
             default:
-                printf("Error: unknown input\n");
+                //printf("Error: unknown input\n");
+                system_error(ERROR_UNKNOWN_INPUT);
         }
 
         // reset pushes counter

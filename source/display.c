@@ -30,27 +30,33 @@ SemaphoreHandle_t display_semaphore = NULL;
  */
 void display_handler()
 {
-    system_code display_code = DISPLAY_TEMPERATURE;
+    system_code new_display_code = DISPLAY_TEMPERATURE;
+    system_code old_display_code = new_display_code;
     display_setting base_code = SET_DECIMAL;
+    bool emergency_on = false;
     int temperature = 70;
     int humidity = 50;
-    int sensor_digit[2] = {0, 0};
+    int display_config[2] = {0, 0};
 
     while (true) {
-        xQueueReceive(display_queue, &display_code, 0);
+        xQueueReceive(display_queue, &new_display_code, 0);
 
-        switch (display_code) {
+        switch (new_display_code) {
+            case DISPLAY_REPEAT:
+                break;
             case DISPLAY_TEMPERATURE:
                 xQueuePeek(sensor_base_queue, &base_code, 0);
                 xQueuePeek(temperature_queue, &temperature, 0);
 
                 if (base_code == SET_DECIMAL) {
-                    sensor_digit[0] = temperature / 10;
-                    sensor_digit[1] = temperature % 10;
+                    display_config[0] = temperature / 10;
+                    display_config[1] = temperature % 10;
                 } else {
-                    sensor_digit[0] = temperature / 16;
-                    sensor_digit[1] = temperature % 16;
+                    display_config[0] = temperature / 16;
+                    display_config[1] = temperature % 16;
                 }
+
+                old_display_code = new_display_code;
 
                 break;
             case DISPLAY_HUMIDITY:
@@ -58,12 +64,14 @@ void display_handler()
                 xQueuePeek(humidity_queue, &humidity, 0);
 
                 if (base_code == SET_DECIMAL) {
-                    sensor_digit[0] = humidity / 10;
-                    sensor_digit[1] = humidity % 10;
+                    display_config[0] = humidity / 10;
+                    display_config[1] = humidity % 10;
                 } else {
-                    sensor_digit[0] = humidity / 16;
-                    sensor_digit[1] = humidity % 16;
+                    display_config[0] = humidity / 16;
+                    display_config[1] = humidity % 16;
                 }
+
+                old_display_code = new_display_code;
 
                 break;
             case MOTOR_STATUS:
@@ -73,16 +81,24 @@ void display_handler()
             case ERROR_OVERFLOW:
                 break;
             case ERROR_EMERGENCY_STOP:
-                sensor_digit[0] = DISPLAY_E;
-                sensor_digit[1] = DISPLAY_E;
+                if (emergency_on == true) {
+                    new_display_code = old_display_code;
+                    emergency_on = false;
+                } else {
+                    new_display_code = DISPLAY_REPEAT;
+                    emergency_on = true;
+
+                    display_config[0] = DISPLAY_E;
+                    display_config[1] = DISPLAY_E;
+                }
 
                 break;
             default:
                 printf("Error\n");
         }
 
-        xQueueSend(left_display_queue, &sensor_digit[0], 0);
-        xQueueSend(right_display_queue, &sensor_digit[1], 0);
+        xQueueSend(left_display_queue, &display_config[0], 0);
+        xQueueSend(right_display_queue, &display_config[1], 0);
 
         //taskYIELD();
         vTaskDelay(1);
@@ -95,7 +111,7 @@ void display_handler()
  */
 void left_display_handler()
 {
-    uint8_t pin_config = 0x00;
+    display_config pin_config = 0;
 
     while (true) {
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
@@ -117,7 +133,7 @@ void left_display_handler()
  */
 void right_display_handler()
 {
-    uint8_t pin_config = 0x00;
+    display_config pin_config = 0;
 
     while (true) {
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {

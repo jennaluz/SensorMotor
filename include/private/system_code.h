@@ -9,6 +9,7 @@
 
 
 typedef enum system_code {
+    DISPLAY_REPEAT          = -1,
     DISPLAY_TEMPERATURE     = 0,
     DISPLAY_HUMIDITY        = 1,
     MOTOR_CLOCKWISE         = 2,
