@@ -166,11 +166,6 @@ void display_value(display_setting digit, display_config pin_config)
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case DISPLAY_CC:
-            gpio_put(PIN_C, 1);
-            gpio_put(PIN_D, 1);
-            gpio_put(PIN_G, 1);
-            break;
         case DISPLAY_D:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -189,6 +184,11 @@ void display_value(display_setting digit, display_config pin_config)
             gpio_put(PIN_A, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
+            gpio_put(PIN_G, 1);
+            break;
+        case DISPLAY_CC:
+            gpio_put(PIN_C, 1);
+            gpio_put(PIN_D, 1);
             gpio_put(PIN_G, 1);
             break;
         case DISPLAY_H:
