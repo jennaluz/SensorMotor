@@ -35,12 +35,6 @@ void display_handler()
     int temperature = 70;
     int humidity = 50;
     int sensor_digit[2] = {0, 0};
-    /*
-    uint8_t uiDisplayConfig[19] = {
-        0xFC, 0x60, 0xDA, 0xF2, 0x66, 0xB6, 0xBE, 0xE0, 0xFE, 0xE6, // digits
-        0xEE, 0x3E, 0x1A, 0x7A, 0x9E, 0x8E, 0x1E, 0x3A, 0x92,       // characters
-    };
-    */
 
     while (true) {
         xQueueReceive(display_queue, &display_code, 0);
@@ -58,9 +52,6 @@ void display_handler()
                     sensor_digit[1] = temperature % 16;
                 }
 
-                xQueueSend(left_display_queue, &sensor_digit[0], 0);
-                xQueueSend(right_display_queue, &sensor_digit[1], 0);
-
                 break;
             case DISPLAY_HUMIDITY:
                 xQueuePeek(sensor_base_queue, &base_code, 0);
@@ -74,9 +65,6 @@ void display_handler()
                     sensor_digit[1] = humidity % 16;
                 }
 
-                xQueueSend(left_display_queue, &sensor_digit[0], 0);
-                xQueueSend(right_display_queue, &sensor_digit[1], 0);
-
                 break;
             case MOTOR_STATUS:
                 break;
@@ -85,10 +73,16 @@ void display_handler()
             case ERROR_OVERFLOW:
                 break;
             case ERROR_EMERGENCY_STOP:
+                sensor_digit[0] = DISPLAY_E;
+                sensor_digit[1] = DISPLAY_E;
+
                 break;
             default:
                 printf("Error\n");
         }
+
+        xQueueSend(left_display_queue, &sensor_digit[0], 0);
+        xQueueSend(right_display_queue, &sensor_digit[1], 0);
 
         //taskYIELD();
         vTaskDelay(1);

@@ -123,9 +123,11 @@ void button1_handler()
                 xQueueOverwrite(sensor_base_queue, &base_code);
                 break;
             case 4:
+                error(ERROR_EMERGENCY_STOP);
+
                 motor_code = MOTOR_HALT;
                 xQueueOverwrite(motor_queue, &motor_code);
-                printf("Emergency stop stepper motor\n");
+
                 break;
             default:
                 printf("Error: unknown input\n");

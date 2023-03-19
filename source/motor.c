@@ -86,6 +86,6 @@ void motor_handler()
                 error(ERROR_UNKNOWN_INPUT);
         }
 
-        //vTaskDelay(100);
+        taskYIELD();
     }
 }
