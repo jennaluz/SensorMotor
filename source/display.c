@@ -30,7 +30,7 @@ SemaphoreHandle_t display_semaphore = NULL;
  */
 void display_handler()
 {
-    system_code_e display_code = DISPLAY_TEMPERATURE;
+    system_code display_code = DISPLAY_TEMPERATURE;
     display_setting base_code = SET_DECIMAL;
     int temperature = 70;
     int humidity = 50;

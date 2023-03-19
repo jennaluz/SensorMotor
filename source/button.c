@@ -24,6 +24,7 @@
 #include "portmacro.h"
 #include "sensor.h"
 #include "system_code.h"
+#include "system_error.h"
 
 
 SemaphoreHandle_t button1_semaphore = NULL;
@@ -37,7 +38,7 @@ const uint BUTTON_3 = 8;
 
 /*
  * Initializes interrupt requests for each buttons.
- * Each event calls the vButtonCallback() function.
+ * Each event calls the button_callback() function.
  */
 void button_irq_init()
 {
@@ -80,7 +81,7 @@ void button1_handler()
     TickType_t end_time = 0;
     uint button_pushes = 0;
     display_setting base_code = SET_DECIMAL;
-    system_code_e motor_code = MOTOR_TEMPERATURE;
+    system_code motor_code = MOTOR_TEMPERATURE;
 
     while (true) {
         xSemaphoreTake(button1_semaphore, portMAX_DELAY);
@@ -123,7 +124,7 @@ void button1_handler()
                 xQueueOverwrite(sensor_base_queue, &base_code);
                 break;
             case 4:
-                error(ERROR_EMERGENCY_STOP);
+                system_error(ERROR_EMERGENCY_STOP);
 
                 motor_code = MOTOR_HALT;
                 xQueueOverwrite(motor_queue, &motor_code);
@@ -150,7 +151,7 @@ void button2_handler()
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;
-    system_code_e motor_code = MOTOR_CLOCKWISE;
+    system_code motor_code = MOTOR_CLOCKWISE;
 
     while (true) {
         xSemaphoreTake(button2_semaphore, portMAX_DELAY);
@@ -209,7 +210,7 @@ void button3_handler()
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;
-    system_code_e display_code = DISPLAY_TEMPERATURE;
+    system_code display_code = DISPLAY_TEMPERATURE;
 
     while (true) {
         xSemaphoreTake(button3_semaphore, portMAX_DELAY);

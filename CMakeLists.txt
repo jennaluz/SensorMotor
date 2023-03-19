@@ -35,7 +35,7 @@ add_executable(
     source/button.c
     source/display.c
     source/display_driver.c
-    source/error.c
+    source/system_error.c
     source/motor.c
     source/motor_driver.c
     source/sensor.c

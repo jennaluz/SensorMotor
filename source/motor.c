@@ -11,11 +11,11 @@
 #include <pico/stdlib.h>
 #include <stdio.h>
 
-#include "error.h"
 #include "motor.h"
 #include "motor_driver.h"
 #include "sensor.h"
 #include "system_code.h"
+#include "system_error.h"
 
 
 QueueHandle_t motor_queue = NULL;
@@ -27,8 +27,8 @@ QueueHandle_t motor_queue = NULL;
  */
 void motor_handler()
 {
-    system_code_e motor_code = MOTOR_CLOCKWISE;
-    system_code_e motor_status = motor_code;
+    system_code motor_code = MOTOR_CLOCKWISE;
+    system_code motor_status = motor_code;
     int old_tmp = 70;
     int new_tmp = 0;
     int old_hmd = 45;
@@ -83,7 +83,7 @@ void motor_handler()
             case MOTOR_STATUS:
                 break;
             default:
-                error(ERROR_UNKNOWN_INPUT);
+                system_error(ERROR_UNKNOWN_INPUT);
         }
 
         taskYIELD();
