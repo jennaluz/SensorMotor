@@ -120,7 +120,7 @@ void button1_handler()
                 system_error(ERROR_EMERGENCY_STOP);
 
                 motor_code = MOTOR_HALT;
-                xQueueSend(motor_queue, &motor_code, 0);
+                xQueueOverwrite(motor_queue, &motor_code);
                 break;
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
