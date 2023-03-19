@@ -13,7 +13,7 @@
 /*
  * Send error code to display_queue.
  */
-void vError(system_code_e eError)
+void error(system_code_e eError)
 {
     xQueueSendToFront(display_queue, &eError, 0);
 }

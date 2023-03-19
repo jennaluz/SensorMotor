@@ -83,7 +83,7 @@ void motor_handler()
             case MOTOR_STATUS:
                 break;
             default:
-                vError(ERROR_UNKNOWN_INPUT);
+                error(ERROR_UNKNOWN_INPUT);
         }
 
         //vTaskDelay(100);
