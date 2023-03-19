@@ -19,6 +19,7 @@
 
 #include "button.h"
 #include "display.h"
+#include "display_driver.h"
 #include "motor.h"
 #include "portmacro.h"
 #include "sensor.h"
@@ -78,7 +79,7 @@ void button1_handler()
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;
-    sensor_base_e base_code = DECIMAL;
+    display_setting base_code = SET_DECIMAL;
     system_code_e motor_code = MOTOR_TEMPERATURE;
 
     while (true) {
@@ -112,10 +113,10 @@ void button1_handler()
                 //printf("Move stepper motor on humidity\n");
                 break;
             case 3:
-                if (base_code == DECIMAL) {
-                    base_code = HEXADECIMAL;
+                if (base_code == SET_DECIMAL) {
+                    base_code = SET_HEXADECIMAL;
                 } else {
-                    base_code = DECIMAL;
+                    base_code = SET_DECIMAL;
                 }
 
                 printf("toggle between\n");

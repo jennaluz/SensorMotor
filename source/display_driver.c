@@ -56,12 +56,20 @@ void display_reset()
     gpio_put(PIN_DP, 0);
 }
 
-void display_value(int pin_config)
+void display_value(display_setting digit, display_config pin_config)
 {
     display_reset();
 
+    if (digit == SET_LEFT) {
+        gpio_put(PIN_CC2, 1);
+        gpio_put(PIN_CC1, 0);
+    } else {
+        gpio_put(PIN_CC1, 1);
+        gpio_put(PIN_CC2, 0);
+    }
+
     switch(pin_config) {
-        case 0:
+        case DISPLAY_0:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -69,38 +77,38 @@ void display_value(int pin_config)
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             break;
-        case 1:
+        case DISPLAY_1:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             break;
-        case 2:
+        case DISPLAY_2:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 3:
+        case DISPLAY_3:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 4:
+        case DISPLAY_4:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 5:
+        case DISPLAY_5:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 6:
+        case DISPLAY_6:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
@@ -108,12 +116,12 @@ void display_value(int pin_config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 7:
+        case DISPLAY_7:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             break;
-        case 8:
+        case DISPLAY_8:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -122,14 +130,14 @@ void display_value(int pin_config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 9:
+        case DISPLAY_9:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 10:
+        case DISPLAY_A:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
@@ -137,33 +145,33 @@ void display_value(int pin_config)
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 11:
+        case DISPLAY_B:
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 12:
+        case DISPLAY_C:
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 13:
+        case DISPLAY_D:
             gpio_put(PIN_B, 1);
             gpio_put(PIN_C, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 14:
+        case DISPLAY_E:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_D, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);
             gpio_put(PIN_G, 1);
             break;
-        case 15:
+        case DISPLAY_F:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_E, 1);
             gpio_put(PIN_F, 1);

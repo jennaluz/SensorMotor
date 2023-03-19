@@ -31,7 +31,7 @@ SemaphoreHandle_t display_semaphore = NULL;
 void display_handler()
 {
     system_code_e display_code = DISPLAY_TEMPERATURE;
-    sensor_base_e base_code = DECIMAL;
+    display_setting base_code = SET_DECIMAL;
     int temperature = 70;
     int humidity = 50;
     int sensor_digit[2] = {0, 0};
@@ -50,7 +50,7 @@ void display_handler()
                 xQueuePeek(sensor_base_queue, &base_code, 0);
                 xQueuePeek(temperature_queue, &temperature, 0);
 
-                if (base_code == DECIMAL) {
+                if (base_code == SET_DECIMAL) {
                     sensor_digit[0] = temperature / 10;
                     sensor_digit[1] = temperature % 10;
                 } else {
@@ -66,7 +66,7 @@ void display_handler()
                 xQueuePeek(sensor_base_queue, &base_code, 0);
                 xQueuePeek(humidity_queue, &humidity, 0);
 
-                if (base_code == DECIMAL) {
+                if (base_code == SET_DECIMAL) {
                     sensor_digit[0] = humidity / 10;
                     sensor_digit[1] = humidity % 10;
                 } else {
@@ -106,10 +106,8 @@ void left_display_handler()
     while (true) {
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
             xQueueReceive(left_display_queue, &pin_config, 0);
-            //printf("L%d\n", uiPinConfig);
-            gpio_put(PIN_CC2, 1);
-            display_value(pin_config);
-            gpio_put(PIN_CC1, 0);
+
+            display_value(SET_LEFT, pin_config);
 
             xSemaphoreGive(display_semaphore);
         }
@@ -131,9 +129,7 @@ void right_display_handler()
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
             xQueueReceive(right_display_queue, &pin_config, 0);
 
-            gpio_put(PIN_CC1, 1);
-            display_value(pin_config);
-            gpio_put(PIN_CC2, 0);
+            display_value(SET_RIGHT, pin_config);
 
             xSemaphoreGive(display_semaphore);
         }
