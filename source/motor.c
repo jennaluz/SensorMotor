@@ -21,7 +21,7 @@
 QueueHandle_t motor_queue = NULL;
 QueueHandle_t motor_direction_queue = NULL;
 
-const uint REV_STEPS = 300;
+const uint REV_STEPS = 275;
 
 
 /*
