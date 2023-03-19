@@ -46,7 +46,22 @@ void display_handler()
             case DISPLAY_REPEAT:
                 break;
             case DISPLAY_TEMPERATURE:
-                xQueuePeek(sensor_base_queue, &base_code, 0);
+                if (xQueueReceive(sensor_base_queue, &base_code, 0) == pdTRUE) {
+                    if (base_code == SET_DECIMAL) {
+                        display_config[0] = DISPLAY_D;
+                        display_config[1] = DISPLAY_D;
+                    } else {
+                        printf("here\n");
+                        display_config[0] = DISPLAY_H;
+                        display_config[1] = DISPLAY_H;
+                    }
+
+                    xQueueSend(left_display_queue, &display_config[0], 0);
+                    xQueueSend(right_display_queue, &display_config[1], 0);
+
+                    vTaskDelay(3 * configTICK_RATE_HZ);
+                }
+
                 xQueuePeek(temperature_queue, &temperature, 0);
 
                 if (base_code == SET_DECIMAL) {
@@ -59,9 +74,26 @@ void display_handler()
 
                 old_display_code = new_display_code;
 
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
+
                 break;
             case DISPLAY_HUMIDITY:
-                xQueuePeek(sensor_base_queue, &base_code, 0);
+                if (xQueueReceive(sensor_base_queue, &base_code, 0) == pdTRUE) {
+                    if (base_code == SET_DECIMAL) {
+                        display_config[0] = DISPLAY_D;
+                        display_config[1] = DISPLAY_D;
+                    } else {
+                        display_config[0] = DISPLAY_H;
+                        display_config[1] = DISPLAY_H;
+                    }
+
+                    xQueueSend(left_display_queue, &display_config[0], 0);
+                    xQueueSend(right_display_queue, &display_config[1], 0);
+
+                    vTaskDelay(3 * configTICK_RATE_HZ);
+                }
+
                 xQueuePeek(humidity_queue, &humidity, 0);
 
                 if (base_code == SET_DECIMAL) {
@@ -73,6 +105,9 @@ void display_handler()
                 }
 
                 old_display_code = new_display_code;
+
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
 
                 break;
             case MOTOR_STATUS:
@@ -88,7 +123,6 @@ void display_handler()
                 new_display_code = old_display_code;
                 break;
             case ERROR_OVERFLOW:
-                printf("here\n");
                 display_config[0] = DISPLAY_O;
                 display_config[1] = DISPLAY_F;
 
@@ -114,9 +148,6 @@ void display_handler()
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
         }
-
-        xQueueSend(left_display_queue, &display_config[0], 0);
-        xQueueSend(right_display_queue, &display_config[1], 0);
 
         //taskYIELD();
         vTaskDelay(1);

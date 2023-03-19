@@ -41,8 +41,9 @@ typedef enum display_config {
     DISPLAY_D     = 13,
     DISPLAY_E     = 14,
     DISPLAY_F     = 15,
-    DISPLAY_O     = 16,
-    DISPLAY_X     = 17,
+    DISPLAY_H     = 16,
+    DISPLAY_O     = 17,
+    DISPLAY_X     = 18,
 } display_config;
 
 typedef enum display_setting {

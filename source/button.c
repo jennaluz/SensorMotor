@@ -118,7 +118,7 @@ void button1_handler()
                     base_code = SET_DECIMAL;
                 }
 
-                xQueueOverwrite(sensor_base_queue, &base_code);
+                xQueueSend(sensor_base_queue, &base_code, 0);
                 break;
             case 4:
                 system_error(ERROR_EMERGENCY_STOP);
