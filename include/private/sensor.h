@@ -1,5 +1,8 @@
 /*
  * SensorMotor/include/private/sensor.h
+ *
+ * Uses HDC1080 API calls to receive temperature and relative humidity.
+ * Constantly sends input to their respective queues.
  */
 
 

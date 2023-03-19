@@ -36,6 +36,7 @@ void motor_init()
     gpio_set_dir(COIL_4, GPIO_OUT);
 }
 
+
 /*
  * Reset all Stepper Motor GPIO pins.
  */
@@ -46,6 +47,7 @@ void motor_reset()
     gpio_put(COIL_3, 0);
     gpio_put(COIL_4, 0);
 }
+
 
 /*
  * Execute 8-step clockwise sequence.
@@ -72,6 +74,7 @@ void motor_clockwise()
     vTaskDelay(1);
     gpio_put(COIL_3, 0);    // 0011
 }
+
 
 /*
  * Execute 8-step counterclockwise sequence.
@@ -120,7 +123,6 @@ void motor_increment()
         motor_clockwise();
     }
 }
-
 
 
 /*

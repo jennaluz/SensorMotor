@@ -1,14 +1,13 @@
 /*
  * SensorMotor/include/private/display_driver.h
  *
- * Initializes 7 Segment Display gpio pins.
+ * Defines enumerated types relating to the 7 Segment Display.
+ * Initializes GPIO pins and configures them.
+ * Defines API functions for the 7 Segment Display.
  */
 
 
 #pragma once
-
-
-#include <pico/stdlib.h>
 
 
 typedef enum display_pinout {

@@ -12,17 +12,11 @@
 
 #include <hardware/gpio.h>
 #include <pico/stdlib.h>
-#include <pico/time.h>
-#include <pico/types.h>
-
-#include <stdio.h>
 
 #include "button.h"
 #include "display.h"
 #include "display_driver.h"
 #include "motor.h"
-#include "portmacro.h"
-#include "sensor.h"
 #include "system_code.h"
 #include "system_error.h"
 
@@ -65,7 +59,7 @@ void button_callback(uint gpio, uint32_t events)
             xSemaphoreGiveFromISR(button3_semaphore, &xHigherPriorityTaskWoken);
             break;
         default:
-            printf("Unexcpected input");
+            system_error(ERROR_UNKNOWN_INPUT);
     }
 
     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
@@ -101,7 +95,7 @@ void button1_handler()
             }
         }
 
-        //printf("Button 1 was pushed %d time(s).\n", uiPushes);
+        // make decision based on count of pushes
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_TEMPERATURE;
@@ -171,18 +165,19 @@ void button2_handler()
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_CLOCKWISE;
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             case 2:
                 motor_code = MOTOR_COUNTERCLOCKWISE;
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             case 3:
                 motor_code = MOTOR_ALTERNATE;
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
         }
-
-        xQueueSend(motor_queue, &motor_code, 0);
 
         // reset pushes counter
         button_pushes = 0;
@@ -221,7 +216,7 @@ void button3_handler()
             }
         }
 
-        //printf("Button 3 was pushed %d time(s).\n", uiPushes);
+        // make decision based on count of pushes
         switch(button_pushes) {
             case 1:
                 display_code = DISPLAY_TEMPERATURE;
@@ -247,6 +242,7 @@ void button3_handler()
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
         }
+
         // reset pushes counter
         button_pushes = 0;
 

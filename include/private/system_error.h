@@ -1,5 +1,7 @@
 /*
- * SensorMotor/include/private/error.h
+ * SensorMotor/include/private/system_error.h
+ *
+ * Handles all error codes.
  */
 
 

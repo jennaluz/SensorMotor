@@ -1,7 +1,8 @@
 /*
  * SensorMotor/include/private/motor.h
  *
- * Defines task that handles the Stepper Motor.
+ * Handles Stepper Motor input through motor_queue.
+ * Sends the current direction of the Stepper Motor through motor_direction_queue.
  */
 
 

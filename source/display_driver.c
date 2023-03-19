@@ -1,10 +1,14 @@
 /*
 * SensorMotor/source/display_driver.c
+*
+* Initializes GPIO pins for the 7 Segment Display.
+* Defines API functions to configure left and right displays.
 */
 
 
-#include "display_driver.h"
 #include <pico/stdlib.h>
+
+#include "display_driver.h"
 
 
 /*
@@ -42,8 +46,8 @@ void display_init()
 
 
 /*
-*
-*/
+ * Deasserts all 7 Segment Display pins.
+ */
 void display_reset()
 {
     gpio_put(PIN_A, 0);
@@ -56,6 +60,11 @@ void display_reset()
     gpio_put(PIN_DP, 0);
 }
 
+
+/*
+ * Depending on the value of the digit, deasserts and asserts the left and right display digit.
+ * Configures the 7 Segment Display based on the value of pin_config.
+ */
 void display_value(display_setting digit, display_config pin_config)
 {
     display_reset();
@@ -68,7 +77,7 @@ void display_value(display_setting digit, display_config pin_config)
         gpio_put(PIN_CC2, 0);
     }
 
-    switch(pin_config) {
+    switch (pin_config) {
         case DISPLAY_0:
             gpio_put(PIN_A, 1);
             gpio_put(PIN_B, 1);

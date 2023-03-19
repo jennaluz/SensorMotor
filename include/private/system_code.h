@@ -1,5 +1,5 @@
 /*
- * SensorMotor/include/private/codes.h
+ * SensorMotor/include/private/system_code.h
  *
  * Defines codes for the Stepper Motor, 7 Segment Display, and error codes.
  */

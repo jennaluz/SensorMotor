@@ -2,14 +2,11 @@
  * SensorMotor/include/private/motor_driver.h
  *
  * Initializes Stepper Motor GPIO pins.
- * Defines API functions to move stepper motor.
+ * Defines API functions to move the Stepper Motor.
  */
 
 
 #pragma once
-
-
-#include <pico/stdlib.h>
 
 
 void motor_init();

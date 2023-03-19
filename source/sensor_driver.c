@@ -1,5 +1,5 @@
 /*
- * SensorMotor/include/private/sensor_driver.h
+ * SensorMotor/source/sensor_driver.c
  *
  * Initializes I2C port and connects to HDC1080.
  * Reads in temperature and humidity from the HDC1080.
@@ -10,11 +10,9 @@
 #include <task.h>
 
 #include <hardware/i2c.h>
-#include <math.h>
-#include <pico/binary_info.h>
 #include <pico/stdlib.h>
-#include <stdint.h>
-#include <stdio.h>
+
+#include <math.h>
 
 #include "sensor_driver.h"
 
@@ -61,7 +59,6 @@ float sensor_read_tmp()
 
     // convert return value to fahrenheit
     fahrenheit = (((return_value / pow(2, 16)) * 165 - 40) * 9 / 5) + 32;
-    //printf("%f degrees F\n", fFahrenheit);
 
     return fahrenheit;
 }
@@ -88,7 +85,6 @@ float sensor_read_hmd()
 
     // convert return value to relative humidity
     relative_humidity = (return_value / pow(2, 16)) * 100;
-    //printf("RH %f\n", fRelativeHumdity);
 
     // return relative humidity
     return relative_humidity;

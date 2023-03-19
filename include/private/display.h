@@ -1,5 +1,9 @@
 /*
  * SensorMotor/include/private/display.h
+ *
+ * Handles input for the 7 Segment Display.
+ * Uses API calls to configure the 7 Segment Display.
+ * Uses the display_semaphore to synchronize the left and right displays.
  */
 
 
@@ -9,8 +13,6 @@
 #include <FreeRTOS.h>
 #include <queue.h>
 #include <semphr.h>
-
-#include <pico/stdlib.h>
 
 
 extern QueueHandle_t display_queue;

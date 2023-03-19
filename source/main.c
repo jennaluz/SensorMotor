@@ -9,9 +9,6 @@
 #include <task.h>
 
 #include <pico/stdlib.h>
-#include <pico/time.h>
-
-#include <stdio.h>
 
 #include "button.h"
 #include "display.h"

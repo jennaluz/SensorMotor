@@ -2,6 +2,7 @@
  * SensorMotor/source/motor.c
  *
  * Controls the Stepper Motor status based on motor_queue values.
+ * Sends the current direction of the Stepper Motor to motor_direction_queue.
  */
 
 
@@ -9,9 +10,7 @@
 #include <task.h>
 
 #include <pico/stdlib.h>
-#include <stdio.h>
 
-#include "display.h"
 #include "motor.h"
 #include "motor_driver.h"
 #include "sensor.h"
@@ -34,6 +33,7 @@ void motor_handler()
     system_code motor_code = MOTOR_CLOCKWISE;
     system_code motor_status = motor_code;
     system_code motor_dir = MOTOR_CLOCKWISE;
+
     int old_tmp = 70;
     int new_tmp = 0;
     int old_hmd = 45;
@@ -42,6 +42,7 @@ void motor_handler()
     while (true) {
         xQueueReceive(motor_queue, &motor_code, 0);
 
+        // changes functionality based on motor_code
         switch (motor_code) {
             case MOTOR_RESET:
                 motor_code = motor_status;
@@ -49,24 +50,28 @@ void motor_handler()
             case MOTOR_CLOCKWISE:
                 motor_dir = MOTOR_CLOCKWISE;
                 xQueueOverwrite(motor_direction_queue, &motor_dir);
+
                 motor_clockwise();
                 motor_status = motor_code;
                 break;
             case MOTOR_COUNTERCLOCKWISE:
                 motor_dir = MOTOR_COUNTERCLOCKWISE;
                 xQueueOverwrite(motor_direction_queue, &motor_dir);
+
                 motor_counterclockwise();
                 motor_status = motor_code;
                 break;
             case MOTOR_ALTERNATE:
                 motor_dir = MOTOR_CLOCKWISE;
                 xQueueOverwrite(motor_direction_queue, &motor_dir);
+
                 for (int i = 0; i < REV_STEPS; i++) {
                     motor_clockwise();
                 }
 
                 motor_dir = MOTOR_COUNTERCLOCKWISE;
                 xQueueOverwrite(motor_direction_queue, &motor_dir);
+
                 for (int i = 0; i < REV_STEPS; i++) {
                     motor_counterclockwise();
                 }
