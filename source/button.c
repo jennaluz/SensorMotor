@@ -13,6 +13,8 @@
 #include <hardware/gpio.h>
 #include <pico/stdlib.h>
 
+#include <stdio.h>
+
 #include "button.h"
 #include "display.h"
 #include "display_driver.h"
@@ -85,7 +87,7 @@ void button1_handler()
 
         while (xTaskGetTickCount() < end_time) {
             // debounce
-            vTaskDelay(175 / portTICK_PERIOD_MS);
+            vTaskDelay(200 / portTICK_PERIOD_MS);
             xSemaphoreTake(button1_semaphore, 0);
             button_pushes++;
 
@@ -151,7 +153,7 @@ void button2_handler()
 
         while (xTaskGetTickCount() < end_time) {
             // debounce
-            vTaskDelay(175 / portTICK_PERIOD_MS);
+            vTaskDelay(200 / portTICK_PERIOD_MS);
             xSemaphoreTake(button2_semaphore, 0);
             button_pushes++;
 
@@ -206,7 +208,7 @@ void button3_handler()
 
         while (xTaskGetTickCount() < end_time) {
             // debounce
-            vTaskDelay(175 / portTICK_PERIOD_MS);
+            vTaskDelay(200 / portTICK_PERIOD_MS);
             xSemaphoreTake(button3_semaphore, 0);
             button_pushes++;
 
