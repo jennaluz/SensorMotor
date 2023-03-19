@@ -105,11 +105,11 @@ void button1_handler()
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_TEMPERATURE;
-                xQueueOverwrite(motor_queue, &motor_code);
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             case 2:
                 motor_code = MOTOR_HUMIDITY;
-                xQueueOverwrite(motor_queue, &motor_code);
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             case 3:
                 if (base_code == SET_DECIMAL) {
@@ -124,7 +124,7 @@ void button1_handler()
                 system_error(ERROR_EMERGENCY_STOP);
 
                 motor_code = MOTOR_HALT;
-                xQueueOverwrite(motor_queue, &motor_code);
+                xQueueSend(motor_queue, &motor_code, 0);
                 break;
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
@@ -182,7 +182,7 @@ void button2_handler()
                 system_error(ERROR_UNKNOWN_INPUT);
         }
 
-        xQueueOverwrite(motor_queue, &motor_code);
+        xQueueSend(motor_queue, &motor_code, 0);
 
         // reset pushes counter
         button_pushes = 0;

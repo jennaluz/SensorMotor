@@ -14,6 +14,7 @@
 
 #include "display.h"
 #include "display_driver.h"
+#include "motor.h"
 #include "sensor.h"
 #include "system_code.h"
 #include "system_error.h"
@@ -31,8 +32,9 @@ SemaphoreHandle_t display_semaphore = NULL;
  */
 void display_handler()
 {
-    system_code new_display_code = DISPLAY_TEMPERATURE;
-    system_code old_display_code = new_display_code;
+    system_code display_code = DISPLAY_TEMPERATURE;
+    system_code display_status = display_code;
+    system_code motor_code = MOTOR_RESET;
     display_setting base_code = SET_DECIMAL;
     bool emergency_on = false;
     int temperature = 70;
@@ -40,9 +42,9 @@ void display_handler()
     int display_config[2] = {0, 0};
 
     while (true) {
-        xQueueReceive(display_queue, &new_display_code, 0);
+        xQueueReceive(display_queue, &display_code, 0);
 
-        switch (new_display_code) {
+        switch (display_code) {
             case DISPLAY_REPEAT:
                 break;
             case DISPLAY_TEMPERATURE:
@@ -72,7 +74,7 @@ void display_handler()
                     display_config[1] = temperature % 16;
                 }
 
-                old_display_code = new_display_code;
+                display_status = display_code;
 
                 xQueueSend(left_display_queue, &display_config[0], 0);
                 xQueueSend(right_display_queue, &display_config[1], 0);
@@ -104,7 +106,7 @@ void display_handler()
                     display_config[1] = humidity % 16;
                 }
 
-                old_display_code = new_display_code;
+                display_status = display_code;
 
                 xQueueSend(left_display_queue, &display_config[0], 0);
                 xQueueSend(right_display_queue, &display_config[1], 0);
@@ -120,7 +122,13 @@ void display_handler()
                 xQueueSend(right_display_queue, &display_config[1], 0);
 
                 vTaskDelay(5 * configTICK_RATE_HZ);
-                new_display_code = old_display_code;
+
+                if (emergency_on == true) {
+                    emergency_on = false;
+                    display_code = ERROR_EMERGENCY_STOP;
+                } else {
+                    display_code = display_status;
+                }
                 break;
             case ERROR_OVERFLOW:
                 display_config[0] = DISPLAY_O;
@@ -130,19 +138,24 @@ void display_handler()
                 xQueueSend(right_display_queue, &display_config[1], 0);
 
                 vTaskDelay(5 * configTICK_RATE_HZ);
-                new_display_code = old_display_code;
+                display_code = display_status;
                 break;
             case ERROR_EMERGENCY_STOP:
                 if (emergency_on == true) {
-                    new_display_code = old_display_code;
+                    xQueueSend(motor_queue, &motor_code, 0);
+
+                    display_code = display_status;
                     emergency_on = false;
                 } else {
-                    new_display_code = DISPLAY_REPEAT;
+                    display_code = DISPLAY_REPEAT;
                     emergency_on = true;
 
                     display_config[0] = DISPLAY_E;
                     display_config[1] = DISPLAY_E;
                 }
+
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
 
                 break;
             default:

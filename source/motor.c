@@ -35,17 +35,23 @@ void motor_handler()
     int new_hmd = 0;
 
     while (true) {
-        xQueuePeek(motor_queue, &motor_code, 0);
+        xQueueReceive(motor_queue, &motor_code, 0);
 
         switch (motor_code) {
+            case MOTOR_RESET:
+                motor_code = motor_status;
+                break;
             case MOTOR_CLOCKWISE:
                 motor_clockwise();
+                motor_status = motor_code;
                 break;
             case MOTOR_COUNTERCLOCKWISE:
                 motor_counterclockwise();
+                motor_status = motor_code;
                 break;
             case MOTOR_ALTERNATE:
                 motor_alternate();
+                motor_status = motor_code;
                 break;
             case MOTOR_TEMPERATURE:
                 xQueuePeek(temperature_queue, &new_tmp, 0);
@@ -61,6 +67,7 @@ void motor_handler()
                 }
 
                 old_tmp = new_tmp;
+                motor_status = motor_code;
                 break;
             case MOTOR_HUMIDITY:
                 xQueuePeek(humidity_queue, &new_hmd, 0);
@@ -76,6 +83,7 @@ void motor_handler()
                 }
 
                 old_hmd = new_hmd;
+                motor_status = motor_code;
                 break;
             case MOTOR_HALT:
                 motor_halt();
