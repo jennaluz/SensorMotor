@@ -13,6 +13,7 @@
 
 
 extern QueueHandle_t motor_queue;
+extern QueueHandle_t motor_direction_queue;
 
 
 void motor_handler();

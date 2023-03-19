@@ -44,6 +44,7 @@ int main()
     left_display_queue = xQueueCreate(1, sizeof(int));
     right_display_queue = xQueueCreate(1, sizeof(int));
     motor_queue = xQueueCreate(1, sizeof(system_code));
+    motor_direction_queue = xQueueCreate(1, sizeof(system_code));
     sensor_base_queue = xQueueCreate(1, sizeof(display_setting));
     temperature_queue = xQueueCreate(1, sizeof(int));
     humidity_queue = xQueueCreate(1, sizeof(int));

@@ -35,6 +35,7 @@ void display_handler()
     system_code display_code = DISPLAY_TEMPERATURE;
     system_code display_status = display_code;
     system_code motor_code = MOTOR_RESET;
+    system_code motor_dir = MOTOR_CLOCKWISE;
     display_setting base_code = SET_DECIMAL;
     bool emergency_on = false;
     int temperature = 70;
@@ -48,6 +49,8 @@ void display_handler()
             case DISPLAY_REPEAT:
                 break;
             case DISPLAY_TEMPERATURE:
+                display_status = display_code;
+
                 if (xQueueReceive(sensor_base_queue, &base_code, 0) == pdTRUE) {
                     if (base_code == SET_DECIMAL) {
                         display_config[0] = DISPLAY_D;
@@ -74,13 +77,13 @@ void display_handler()
                     display_config[1] = temperature % 16;
                 }
 
-                display_status = display_code;
-
                 xQueueSend(left_display_queue, &display_config[0], 0);
                 xQueueSend(right_display_queue, &display_config[1], 0);
 
                 break;
             case DISPLAY_HUMIDITY:
+                display_status = display_code;
+
                 if (xQueueReceive(sensor_base_queue, &base_code, 0) == pdTRUE) {
                     if (base_code == SET_DECIMAL) {
                         display_config[0] = DISPLAY_D;
@@ -106,13 +109,35 @@ void display_handler()
                     display_config[1] = humidity % 16;
                 }
 
-                display_status = display_code;
-
                 xQueueSend(left_display_queue, &display_config[0], 0);
                 xQueueSend(right_display_queue, &display_config[1], 0);
 
                 break;
             case MOTOR_STATUS:
+                display_status = display_code;
+                printf("here\n");
+
+                xQueuePeek(motor_direction_queue, &motor_dir, 0);
+
+                switch (motor_dir) {
+                    case MOTOR_CLOCKWISE:
+                        display_config[0] = DISPLAY_C;
+                        display_config[1] = DISPLAY_C;
+                        break;
+                    case MOTOR_COUNTERCLOCKWISE:
+                        display_config[0] = DISPLAY_CC;
+                        display_config[1] = DISPLAY_CC;
+                        break;
+                    case MOTOR_HALT:
+                        display_config[0] = DISPLAY_O;
+                        display_config[1] = DISPLAY_O;
+                        break;
+                    default:
+                        system_error(ERROR_UNKNOWN_INPUT);
+                }
+
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
                 break;
             case ERROR_UNKNOWN_INPUT:
                 display_config[0] = DISPLAY_X;
@@ -138,11 +163,13 @@ void display_handler()
                 xQueueSend(right_display_queue, &display_config[1], 0);
 
                 vTaskDelay(5 * configTICK_RATE_HZ);
+
                 display_code = display_status;
                 break;
             case ERROR_EMERGENCY_STOP:
                 if (emergency_on == true) {
-                    xQueueSend(motor_queue, &motor_code, 0);
+                    motor_code = MOTOR_RESET;
+                    xQueueOverwrite(motor_queue, &motor_code);
 
                     display_code = display_status;
                     emergency_on = false;

@@ -201,6 +201,7 @@ void button3_handler()
     TickType_t end_time = 0;
     uint button_pushes = 0;
     system_code display_code = DISPLAY_TEMPERATURE;
+    system_code motor_code = MOTOR_STATUS;
 
     while (true) {
         xSemaphoreTake(button3_semaphore, portMAX_DELAY);

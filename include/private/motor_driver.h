@@ -16,7 +16,6 @@ void motor_init();
 void motor_reset();
 void motor_clockwise();
 void motor_counterclockwise();
-void motor_alternate();
 void motor_halt();
 void motor_increment();
 void motor_decrement();

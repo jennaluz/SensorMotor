@@ -11,6 +11,7 @@
 #include <pico/stdlib.h>
 #include <stdio.h>
 
+#include "display.h"
 #include "motor.h"
 #include "motor_driver.h"
 #include "sensor.h"
@@ -19,6 +20,9 @@
 
 
 QueueHandle_t motor_queue = NULL;
+QueueHandle_t motor_direction_queue = NULL;
+
+const uint REV_STEPS = 300;
 
 
 /*
@@ -29,6 +33,7 @@ void motor_handler()
 {
     system_code motor_code = MOTOR_CLOCKWISE;
     system_code motor_status = motor_code;
+    system_code motor_dir = MOTOR_CLOCKWISE;
     int old_tmp = 70;
     int new_tmp = 0;
     int old_hmd = 45;
@@ -42,26 +47,47 @@ void motor_handler()
                 motor_code = motor_status;
                 break;
             case MOTOR_CLOCKWISE:
+                motor_dir = MOTOR_CLOCKWISE;
+                xQueueOverwrite(motor_direction_queue, &motor_dir);
                 motor_clockwise();
                 motor_status = motor_code;
                 break;
             case MOTOR_COUNTERCLOCKWISE:
+                motor_dir = MOTOR_COUNTERCLOCKWISE;
+                xQueueOverwrite(motor_direction_queue, &motor_dir);
                 motor_counterclockwise();
                 motor_status = motor_code;
                 break;
             case MOTOR_ALTERNATE:
-                motor_alternate();
+                motor_dir = MOTOR_CLOCKWISE;
+                xQueueOverwrite(motor_direction_queue, &motor_dir);
+                for (int i = 0; i < REV_STEPS; i++) {
+                    motor_clockwise();
+                }
+
+                motor_dir = MOTOR_COUNTERCLOCKWISE;
+                xQueueOverwrite(motor_direction_queue, &motor_dir);
+                for (int i = 0; i < REV_STEPS; i++) {
+                    motor_counterclockwise();
+                }
+
                 motor_status = motor_code;
                 break;
             case MOTOR_TEMPERATURE:
                 xQueuePeek(temperature_queue, &new_tmp, 0);
 
                 if (new_tmp == old_tmp) {
+                    motor_dir = MOTOR_HALT;
+                    xQueueOverwrite(motor_direction_queue, &motor_dir);
                     motor_halt();
                 } else {
                     if (new_tmp > old_tmp) {
+                        motor_dir = MOTOR_CLOCKWISE;
+                        xQueueOverwrite(motor_direction_queue, &motor_dir);
                         motor_increment();
                     } else {
+                        motor_dir = MOTOR_COUNTERCLOCKWISE;
+                        xQueueOverwrite(motor_direction_queue, &motor_dir);
                         motor_decrement();
                     }
                 }
@@ -73,11 +99,17 @@ void motor_handler()
                 xQueuePeek(humidity_queue, &new_hmd, 0);
 
                 if (new_hmd == old_hmd) {
+                    motor_dir = MOTOR_HALT;
+                    xQueueOverwrite(motor_direction_queue, &motor_dir);
                     motor_halt();
                 } else {
                     if (new_hmd > old_hmd) {
+                        motor_dir = MOTOR_CLOCKWISE;
+                        xQueueOverwrite(motor_direction_queue, &motor_dir);
                         motor_increment();
                     } else {
+                        motor_dir = MOTOR_COUNTERCLOCKWISE;
+                        xQueueOverwrite(motor_direction_queue, &motor_dir);
                         motor_decrement();
                     }
                 }
@@ -86,14 +118,14 @@ void motor_handler()
                 motor_status = motor_code;
                 break;
             case MOTOR_HALT:
+                motor_dir = MOTOR_HALT;
+                xQueueOverwrite(motor_direction_queue, &motor_dir);
                 motor_halt();
-                break;
-            case MOTOR_STATUS:
                 break;
             default:
                 system_error(ERROR_UNKNOWN_INPUT);
         }
 
-        taskYIELD();
+        vTaskDelay(1);
     }
 }

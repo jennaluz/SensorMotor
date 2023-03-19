@@ -17,7 +17,6 @@ const uint COIL_1         = 12;
 const uint COIL_2         = 13;
 const uint COIL_3         = 6;
 const uint COIL_4         = 0;
-const uint REV_STEPS      = 300; // revolutions per step
 const uint INTERVAL_STEPS = 10;
 
 
@@ -97,22 +96,6 @@ void motor_counterclockwise()
     gpio_put(COIL_2, 0);    // 1000
     vTaskDelay(1);
     gpio_put(COIL_4, 1);    // 1001
-}
-
-/*
- * Complete a single revolution based on REV_STEPS.
- * Alternate between clockwise and counterclockwise revolutions.
- */
-void motor_alternate()
-{
-    int i = 0;
-    for (i = 0; i < REV_STEPS; i++) {
-        motor_clockwise();
-    }
-
-    for (i = 0; i < REV_STEPS; i++) {
-        motor_counterclockwise();
-    }
 }
 
 
