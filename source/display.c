@@ -16,6 +16,7 @@
 #include "display_driver.h"
 #include "sensor.h"
 #include "system_code.h"
+#include "system_error.h"
 
 
 QueueHandle_t display_queue = NULL;
@@ -77,8 +78,25 @@ void display_handler()
             case MOTOR_STATUS:
                 break;
             case ERROR_UNKNOWN_INPUT:
+                display_config[0] = DISPLAY_X;
+                display_config[1] = DISPLAY_X;
+
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
+
+                vTaskDelay(5 * configTICK_RATE_HZ);
+                new_display_code = old_display_code;
                 break;
             case ERROR_OVERFLOW:
+                printf("here\n");
+                display_config[0] = DISPLAY_O;
+                display_config[1] = DISPLAY_F;
+
+                xQueueSend(left_display_queue, &display_config[0], 0);
+                xQueueSend(right_display_queue, &display_config[1], 0);
+
+                vTaskDelay(5 * configTICK_RATE_HZ);
+                new_display_code = old_display_code;
                 break;
             case ERROR_EMERGENCY_STOP:
                 if (emergency_on == true) {
@@ -94,7 +112,7 @@ void display_handler()
 
                 break;
             default:
-                printf("Error\n");
+                system_error(ERROR_UNKNOWN_INPUT);
         }
 
         xQueueSend(left_display_queue, &display_config[0], 0);

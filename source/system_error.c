@@ -16,5 +16,8 @@
  */
 void system_error(system_code error)
 {
+    if (error == ERROR_OVERFLOW) {
+        xQueueReset(display_queue);
+    }
     xQueueSendToFront(display_queue, &error, 0);
 }

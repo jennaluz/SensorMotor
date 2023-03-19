@@ -106,12 +106,10 @@ void button1_handler()
             case 1:
                 motor_code = MOTOR_TEMPERATURE;
                 xQueueOverwrite(motor_queue, &motor_code);
-                //printf("Move stepper motor on temperature\n");
                 break;
             case 2:
                 motor_code = MOTOR_HUMIDITY;
                 xQueueOverwrite(motor_queue, &motor_code);
-                //printf("Move stepper motor on humidity\n");
                 break;
             case 3:
                 if (base_code == SET_DECIMAL) {
@@ -120,7 +118,6 @@ void button1_handler()
                     base_code = SET_DECIMAL;
                 }
 
-                printf("toggle between\n");
                 xQueueOverwrite(sensor_base_queue, &base_code);
                 break;
             case 4:
@@ -128,10 +125,8 @@ void button1_handler()
 
                 motor_code = MOTOR_HALT;
                 xQueueOverwrite(motor_queue, &motor_code);
-
                 break;
             default:
-                //printf("Error: unknown input\n");
                 system_error(ERROR_UNKNOWN_INPUT);
         }
 
@@ -176,24 +171,18 @@ void button2_handler()
         switch (button_pushes) {
             case 1:
                 motor_code = MOTOR_CLOCKWISE;
-                xQueueOverwrite(motor_queue, &motor_code);
-                //printf("Continuously move stepper motor clockwise\n");
                 break;
             case 2:
                 motor_code = MOTOR_COUNTERCLOCKWISE;
-                xQueueOverwrite(motor_queue, &motor_code);
-                //printf("Continuously move stepper motor counterclockwise\n");
                 break;
             case 3:
                 motor_code = MOTOR_ALTERNATE;
-                xQueueOverwrite(motor_queue, &motor_code);
-                //printf("Alternate stepper motor between clockwise and counterclockwise revolutions\n");
                 break;
             default:
-                printf("Error: unknown input\n");
+                system_error(ERROR_UNKNOWN_INPUT);
         }
 
-        //printf("Button 2 was pushed %d time(s).\n", uiPushes);
+        xQueueOverwrite(motor_queue, &motor_code);
 
         // reset pushes counter
         button_pushes = 0;
@@ -235,21 +224,28 @@ void button3_handler()
         switch(button_pushes) {
             case 1:
                 display_code = DISPLAY_TEMPERATURE;
-                xQueueSend(display_queue, &display_code, 0);
-                //printf("d\n");
+
+                if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
+                    system_error(ERROR_OVERFLOW);
+                }
                 break;
             case 2:
                 display_code = DISPLAY_HUMIDITY;
-                xQueueSend(display_queue, &display_code, 0);
+
+                if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
+                    system_error(ERROR_OVERFLOW);
+                }
                 break;
             case 3:
                 display_code = MOTOR_STATUS;
-                xQueueSend(display_queue, &display_code, 0);
+
+                if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
+                    system_error(ERROR_OVERFLOW);
+                }
                 break;
             default:
-                printf("Error: unknown input\n");
+                system_error(ERROR_UNKNOWN_INPUT);
         }
-
         // reset pushes counter
         button_pushes = 0;
 
