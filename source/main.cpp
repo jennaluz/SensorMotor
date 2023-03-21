@@ -30,6 +30,7 @@ int main()
     motor_init();
     sensor_init();
     button_irq_init();
+    //pixel_init();
 
     // create semaphores
     button1_semaphore = xSemaphoreCreateBinary();
@@ -46,6 +47,7 @@ int main()
     sensor_base_queue = xQueueCreate(1, sizeof(display_setting));
     temperature_queue = xQueueCreate(1, sizeof(int));
     humidity_queue = xQueueCreate(1, sizeof(int));
+    //pixel_queue = xQueueCreate(1, sizeof(system_code));
 
     // create tasks
     xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);
