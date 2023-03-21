@@ -17,4 +17,4 @@ extern QueueHandle_t motor_queue;
 extern QueueHandle_t motor_direction_queue;
 
 
-void motor_handler();
+void motor_handler(void *parameters);

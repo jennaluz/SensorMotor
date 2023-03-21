@@ -23,6 +23,6 @@ extern SemaphoreHandle_t button3_semaphore;
 
 void button_irq_init();
 void button_callback(uint gpio, uint32_t events);
-void button1_handler();
-void button2_handler();
-void button3_handler();
+void button1_handler(void *parameters);
+void button2_handler(void *parameters);
+void button3_handler(void *parameters);

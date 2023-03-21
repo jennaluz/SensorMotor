@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/button.c
+ * SensorMotor/source/button.cpp
  *
  * Initializes button interrupt service routines.
  * Uses a semaphore to signal button tasks when their respective buttons were pushed.
@@ -72,7 +72,7 @@ void button_callback(uint gpio, uint32_t events)
  * Blocks on button1_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void button1_handler()
+void button1_handler(void *parameters)
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;
@@ -139,7 +139,7 @@ void button1_handler()
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  * Changes the status of the Stepper Motor based on the button input.
  */
-void button2_handler()
+void button2_handler(void *parameters)
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;
@@ -193,7 +193,7 @@ void button2_handler()
  * Blocks on button3_semaphore.
  * Once initially taken, debounces button and wait for more input within a 2s timeframe.
  */
-void button3_handler()
+void button3_handler(void *parameters)
 {
     TickType_t end_time = 0;
     uint button_pushes = 0;

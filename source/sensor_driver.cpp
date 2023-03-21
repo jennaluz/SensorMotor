@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/sensor_driver.c
+ * SensorMotor/source/sensor_driver.cpp
  *
  * Initializes I2C port and connects to HDC1080.
  * Reads in temperature and humidity from the HDC1080.

@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/system_error.c
+ * SensorMotor/source/system_error.cpp
  *
  * Receives error codes to send to display_queue.
  */

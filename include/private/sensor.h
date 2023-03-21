@@ -17,4 +17,4 @@ extern QueueHandle_t temperature_queue;
 extern QueueHandle_t humidity_queue;
 
 
-void sensor_handler();
+void sensor_handler(void *parameters);

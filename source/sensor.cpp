@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/sensor.c
+ * SensorMotor/source/sensor.cpp
  *
  * Uses the I2C port to interact with the HDC1080 device.
  * Reads in the temperature and humidity from the HDC1080 device.
@@ -26,7 +26,7 @@ QueueHandle_t humidity_queue = NULL;
  * Reads in temperature and humidity values from HDC1080.
  * Overwrites the corresponding queue to send the most up to date value.
  */
-void sensor_handler()
+void sensor_handler(void *parameters)
 {
     int temperature = 0;
     int humidity = 0;

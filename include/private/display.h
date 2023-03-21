@@ -22,6 +22,6 @@ extern QueueHandle_t sensor_base_queue;
 extern SemaphoreHandle_t display_semaphore;
 
 
-void display_handler();
-void left_display_handler();
-void right_display_handler();
+void display_handler(void *parameters);
+void left_display_handler(void *parameters);
+void right_display_handler(void *parameters);

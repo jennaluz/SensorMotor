@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/display.c
+ * SensorMotor/source/display.cpp
  *
  * Handles input for the 7 Segment Display from display_queue.
  * Sends display digit to left and right displays.
@@ -33,7 +33,7 @@ SemaphoreHandle_t display_semaphore = NULL;
  * Receives input from display_queue.
  * Sends respective digit value to the left_display_handler and right_display_handler.
  */
-void display_handler()
+void display_handler(void *parameters)
 {
     system_code display_code = DISPLAY_TEMPERATURE;
     system_code display_status = display_code;
@@ -207,9 +207,9 @@ void display_handler()
  * Uses display_semaphore to synchronize with right_display_handler.
  * Configures left display based on input from left_display_queue.
  */
-void left_display_handler()
+void left_display_handler(void *parameters)
 {
-    display_config pin_config = 0;
+    display_config pin_config = DISPLAY_O;
 
     while (true) {
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {
@@ -228,9 +228,9 @@ void left_display_handler()
  * Uses display_semaphore to synchronize with left_display_handler.
  * Configures left display based on input from right_display_queue.
  */
-void right_display_handler()
+void right_display_handler(void *parameters)
 {
-    display_config pin_config = 0;
+    display_config pin_config = DISPLAY_O;
 
     while (true) {
         if (xSemaphoreTake(display_semaphore, 0) == pdTRUE) {

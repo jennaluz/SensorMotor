@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/motor.c
+ * SensorMotor/source/motor.cpp
  *
  * Controls the Stepper Motor status based on motor_queue values.
  * Sends the current direction of the Stepper Motor to motor_direction_queue.
@@ -28,7 +28,7 @@ const uint REV_STEPS = 275;
  * Reads in information from motor_queue to control the status of the queue.
  * The status of the queue is defined by the enumeratored eStatus varaible.
  */
-void motor_handler()
+void motor_handler(void *parameters)
 {
     system_code motor_code = MOTOR_CLOCKWISE;
     system_code motor_status = motor_code;

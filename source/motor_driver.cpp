@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/motor_driver.c
+ * SensorMotor/source/motor_driver.cpp
  *
  * Sends a sequence of signals to the Stepper Motor GPIO pins to manipulate it.
  */

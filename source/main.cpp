@@ -1,5 +1,5 @@
 /*
- * SensorMotor/source/main.c
+ * SensorMotor/source/main.cpp
  */
 
 
@@ -15,6 +15,7 @@
 #include "display_driver.h"
 #include "motor.h"
 #include "motor_driver.h"
+#include "pixel.h"
 #include "sensor.h"
 #include "sensor_driver.h"
 #include "system_code.h"
@@ -55,6 +56,7 @@ int main()
     xTaskCreate(right_display_handler, "Right Display", 256, NULL, 3, NULL);
     xTaskCreate(motor_handler, "Stepper Motor Handler", 256, NULL, 3, NULL);
     xTaskCreate(sensor_handler, "HDC1080 Handler", 256, NULL, 3, NULL);
+    xTaskCreate(pixel_handler, "Neopixel Hander", 256, NULL, 3, NULL);
 
     // give display semaphore
     xSemaphoreGive(display_semaphore);

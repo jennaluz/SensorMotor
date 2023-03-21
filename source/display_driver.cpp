@@ -1,5 +1,5 @@
 /*
-* SensorMotor/source/display_driver.c
+* SensorMotor/source/display_driver.cpp
 *
 * Initializes GPIO pins for the 7 Segment Display.
 * Defines API functions to configure left and right displays.

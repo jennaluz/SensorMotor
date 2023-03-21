@@ -7,7 +7,10 @@ project(SensorMotor VERSION 1.0.0 LANGUAGES C CXX ASM)
 pico_sdk_init()
 
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(PICO_SDK_FREERTOS_SOURCE /Users/jenna-luzpura/Desktop/Dev/Courses/S23/CS452/pico/FreeRTOS-Kernel)
+set (CMAKE_CXX_STANDARD 17)
+set (PICO_CXX_ENABLE_EXCEPTIONS 1)
+set (PICO_CXX_ENABLE_RTTI 1)
+set (PICO_SDK_FREERTOS_SOURCE /Users/jenna-luzpura/Desktop/Dev/Courses/S23/CS452/pico/FreeRTOS-Kernel)
 
 add_library(
     freertos
@@ -31,15 +34,16 @@ target_include_directories(
 
 add_executable(
     ${CMAKE_PROJECT_NAME}
-    source/main.c
-    source/button.c
-    source/display.c
-    source/display_driver.c
-    source/system_error.c
-    source/motor.c
-    source/motor_driver.c
-    source/sensor.c
-    source/sensor_driver.c
+    source/main.cpp
+    source/button.cpp
+    source/display.cpp
+    source/display_driver.cpp
+    source/motor.cpp
+    source/motor_driver.cpp
+    source/pixel.cpp
+    source/sensor.cpp
+    source/sensor_driver.cpp
+    source/system_error.cpp
     )
 
 pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
