@@ -19,6 +19,7 @@
 #include "display.h"
 #include "display_driver.h"
 #include "motor.h"
+#include "pixel.h"
 #include "system_code.h"
 #include "system_error.h"
 
@@ -223,6 +224,7 @@ void button3_handler(void *parameters)
             case 1:
                 display_code = DISPLAY_TEMPERATURE;
 
+                xQueueSend(pixel_queue, &display_code, 0);
                 if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
                     system_error(ERROR_OVERFLOW);
                 }

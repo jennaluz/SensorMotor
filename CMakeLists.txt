@@ -44,6 +44,7 @@ add_executable(
     source/sensor.cpp
     source/sensor_driver.cpp
     source/system_error.cpp
+    source/WS2812.cpp
     )
 
 pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
@@ -54,7 +55,15 @@ target_link_libraries(
     ${CMAKE_PROJECT_NAME}
     freertos
     pico_stdlib
+    hardware_adc
     hardware_gpio
     hardware_i2c
-    hardware_adc
+    hardware_pio
     )
+
+pico_generate_pio_header(${CMAKE_PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/source/WS2812.pio)
+pico_set_program_name(${CMAKE_PROJECT_NAME} "${CMAKE_PROJECT_NAME}")
+pico_set_program_version(${CMAKE_PROJECT_NAME} "1.0")
+
+pico_enable_stdio_uart(${CMAKE_PROJECT_NAME} 1)
+pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
