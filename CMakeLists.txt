@@ -1,15 +1,19 @@
 cmake_minimum_required(VERSION 3.14)
+
 set(PICO_BOARD adafruit_feather_rp2040)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 include(pico_sdk_import.cmake)
 
 project(SensorMotor VERSION 1.0.0 LANGUAGES C CXX ASM)
 
-pico_sdk_init()
-
-set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set (CMAKE_CXX_STANDARD 17)
 set (PICO_CXX_ENABLE_EXCEPTIONS 1)
 set (PICO_CXX_ENABLE_RTTI 1)
+
+pico_sdk_init()
+
 set (PICO_SDK_FREERTOS_SOURCE /Users/jenna-luzpura/Desktop/Dev/Courses/S23/CS452/pico/FreeRTOS-Kernel)
 
 add_library(
@@ -47,9 +51,9 @@ add_executable(
     source/WS2812.cpp
     )
 
+pico_generate_pio_header(${CMAKE_PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/source/WS2812.pio)
 pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
-pico_enable_stdio_uart(${CMAKE_PROJECT_NAME} 1)
-pico_add_extra_outputs(${CMAKE_PROJECT_NAME})
+pico_enable_stdio_uart(${CMAKE_PROJECT_NAME} 0)
 
 target_link_libraries(
     ${CMAKE_PROJECT_NAME}
@@ -61,9 +65,4 @@ target_link_libraries(
     hardware_pio
     )
 
-pico_generate_pio_header(${CMAKE_PROJECT_NAME} ${CMAKE_CURRENT_LIST_DIR}/source/WS2812.pio)
-pico_set_program_name(${CMAKE_PROJECT_NAME} "${CMAKE_PROJECT_NAME}")
-pico_set_program_version(${CMAKE_PROJECT_NAME} "1.0")
-
-pico_enable_stdio_uart(${CMAKE_PROJECT_NAME} 1)
-pico_enable_stdio_usb(${CMAKE_PROJECT_NAME} 1)
+pico_add_extra_outputs(${CMAKE_PROJECT_NAME})

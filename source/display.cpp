@@ -13,10 +13,12 @@
 #include <task.h>
 
 #include <pico/stdlib.h>
+#include <stdio.h>
 
 #include "display.h"
 #include "display_driver.h"
 #include "motor.h"
+#include "pixel.h"
 #include "sensor.h"
 #include "system_code.h"
 #include "system_error.h"
@@ -182,6 +184,7 @@ void display_handler(void *parameters)
                     xQueueOverwrite(motor_queue, &motor_code);
 
                     display_code = display_status;
+                    xQueueOverwrite(pixel_queue, &display_code);
                     emergency_on = false;
                 } else {
                     display_code = DISPLAY_REPEAT;

@@ -60,16 +60,16 @@ uint32_t WS2812::convertData(uint32_t rgbw) {
     for (uint b = 0; b < 4; b++) {
         switch (bytes[b]) {
             case RED:
-                result |= (rgbw & 0x00);
+                result |= (rgbw & 0xFF);
                 break;
             case GREEN:
-                result |= (rgbw & 0x0000) >> 8;
+                result |= (rgbw & 0xFF00) >> 8;
                 break;
             case BLUE:
-                result |= (rgbw & 0x000000) >> 16;
+                result |= (rgbw & 0xFF0000) >> 16;
                 break;
             case WHITE:
-                result |= (rgbw & 0x00000000) >> 24;
+                result |= (rgbw & 0xFF000000) >> 24;
                 break;
         }
         result <<= 8;

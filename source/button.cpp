@@ -79,6 +79,7 @@ void button1_handler(void *parameters)
     uint button_pushes = 0;
     display_setting base_code = SET_DECIMAL;
     system_code motor_code = MOTOR_TEMPERATURE;
+    system_code error_code = ERROR_EMERGENCY_STOP;
 
     while (true) {
         xSemaphoreTake(button1_semaphore, portMAX_DELAY);
@@ -119,6 +120,7 @@ void button1_handler(void *parameters)
                 break;
             case 4:
                 system_error(ERROR_EMERGENCY_STOP);
+                xQueueSend(pixel_queue, &error_code, 0);
 
                 motor_code = MOTOR_HALT;
                 xQueueOverwrite(motor_queue, &motor_code);
@@ -232,6 +234,7 @@ void button3_handler(void *parameters)
             case 2:
                 display_code = DISPLAY_HUMIDITY;
 
+                xQueueSend(pixel_queue, &display_code, 0);
                 if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
                     system_error(ERROR_OVERFLOW);
                 }
@@ -239,6 +242,7 @@ void button3_handler(void *parameters)
             case 3:
                 display_code = MOTOR_STATUS;
 
+                xQueueSend(pixel_queue, &display_code, 0);
                 if (xQueueSend(display_queue, &display_code, 0) == pdFALSE) {
                     system_error(ERROR_OVERFLOW);
                 }

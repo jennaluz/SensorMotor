@@ -50,7 +50,6 @@ int main()
     pixel_queue = xQueueCreate(1, sizeof(system_code));
 
     // create tasks
-    /*
     xTaskCreate(button1_handler, "Button 1", 256, NULL, 4, NULL);
     xTaskCreate(button2_handler, "Button 2", 256, NULL, 4, NULL);
     xTaskCreate(button3_handler, "Button 3", 256, NULL, 4, NULL);
@@ -59,7 +58,6 @@ int main()
     xTaskCreate(right_display_handler, "Right Display", 256, NULL, 3, NULL);
     xTaskCreate(motor_handler, "Stepper Motor Handler", 256, NULL, 3, NULL);
     xTaskCreate(sensor_handler, "HDC1080 Handler", 256, NULL, 3, NULL);
-    */
     xTaskCreate(pixel_handler, "Neopixel Hander", 256, NULL, 3, NULL);
 
     // give display semaphore
