@@ -9,13 +9,13 @@ FreeRTOS and PicoSDK are used in this project. If you already have these softwar
 ### Quick Start
 FreeRTOS and PicoSDK are used in this project. To build this project on your machine, follow the [Installations](#installations) section.
 
-1. Enter the following commands in your terminal to clone
-- over HTTP
+1. Enter the following command in your terminal to clone this repository
+- using HTTP
 ```
 git clone https://github.com/jennaluz/SensorMotor.git
 ```
 
-- over SSH
+- using SSH
 ```
 git clone git@github.com:jennaluz/SensorMotor.git
 ```
