@@ -1,2 +1,70 @@
 # Sensor Motor
-Uses buttons to manipulate a stepper motor.
+The Sensor Motor reads in temperature and humidity using the HDC1080 device. These values can be display on the 7 Segment Display and manipulate the Stepper Motor. Alternatively, buttons on the Vandalino board can also be used to change 7 Segment Display and Stepper Motor settings. Neopixels on the Vandalino board also reflect the state of the system.
+
+### Installations
+- FreeRTOS
+- PicoSDK
+
+### Quick Start
+FreeRTOS and PicoSDK are used in this project. To build this project on your machine, follow the [Installations](#installations) section.
+
+1. Enter the following commands in your terminal to clone
+- over HTTP
+```
+git clone https://github.com/jennaluz/SensorMotor.git
+```
+
+- over SSH
+```
+git clone git@github.com:jennaluz/SensorMotor.git
+```
+
+2. In the prject directory, set the PicoSDK environment variable using the following command
+```
+export PICO_SDK_PATH=Path/To/PicoSDK
+```
+
+3. To build the executable, enter the following commands
+```
+cmake -B build
+cmake --build build
+```
+
+4. Flash the executable on the Pico Feather using the following command
+```
+cp build/SensorMotor.uf2
+```
+
+The Sensor Motor program is now running on your Pico Feather! View the [Quick Controls](#quick-controls) section for an overview on how to use the buttons on the Vandalino board to manipulate the system.
+
+### Quick Controls
+__Button 1__
+- _1 Push_: The Stepper Motor...
+  - Moves clockwise when temperature increases.
+  - Moves counterclockwise when temperature decreases.
+  - Does not move when temperature does not change.
+- _2 Pushes_: The Stepper Motor...
+  - Moves clockwise when humidity increases.
+  - Moves counterclockwise when humidity decreases.
+  - Does not move when humidity does not change.
+- _3 Pushes_: The 7 Segment Display switches between displaying decimal and hexadecimal.
+- _4 Pushes_: The Emergency Stop mechanism is activated. If the Emergency Stop mechanism is already active, it is deactivated.
+
+__Button 2__
+- _1 Push_: Continuously moves the Stepper Motor clockwise.
+- _2 Pushes_: Continuously moves the Stepper Motor counterclockwise.
+- _3 Pushes_: Alternates the Stepper Motor between clockwise and counterclockwise revolutions.
+
+__Button 3__
+- _1 Push_: The 7 Segment Display shows the current temperature.
+- _2 Pushes_: The 7 Segment Displays shows the current humidity.
+- _3 Pushes_: The 7 Segment Display shows the Stepper Motor status...
+  - Displays (cc) when moving clockwise.
+  - Displays (ↄↄ) when moving counterclockwise.
+  - Displays (oo) when not moving.
+
+__NeoPixel__
+- _Pixel 1_ (topmost):
+- _Pixel 2_:
+- _Pixel 3_:
+- _Pixel 4_ (bottommost):
