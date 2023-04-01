@@ -3,8 +3,8 @@ The Sensor Motor reads in temperature and humidity using the HDC1080 device. The
 
 ### Installations
 FreeRTOS and PicoSDK are used in this project. If you already have these softwares installed, jump to the [Quick Start](#quick-start) section to get the Sensor Motor running on your machine!
-- FreeRTOS
-- PicoSDK
+- Follow [this guide](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/V10.5.1) to download the FreeRTOS Kernel
+- Follow [this guide](https://github.com/raspberrypi/pico-sdk) to download the Raspberry Pi PicoSDK.
 
 ### Quick Start
 FreeRTOS and PicoSDK are used in this project. To build this project on your machine, follow the [Installations](#installations) section.
