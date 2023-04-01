@@ -2,6 +2,7 @@
 The Sensor Motor reads in temperature and humidity using the HDC1080 device. These values can be display on the 7 Segment Display and manipulate the Stepper Motor. Alternatively, buttons on the Vandalino board can also be used to change 7 Segment Display and Stepper Motor settings. Neopixels on the Vandalino board also reflect the state of the system.
 
 ### Installations
+FreeRTOS and PicoSDK are used in this project. If you already have these softwares installed, jump to the [Quick Start](#quick-start) section to get the Sensor Motor running on your machine!
 - FreeRTOS
 - PicoSDK
 
@@ -38,6 +39,8 @@ cp build/SensorMotor.uf2
 The Sensor Motor program is now running on your Pico Feather! View the [Quick Controls](#quick-controls) section for an overview on how to use the buttons on the Vandalino board to manipulate the system.
 
 ### Quick Controls
+For more in-depth user instructions, see the [Sensor Motor User Manual](docs/SensorMotor_UserManual.pdf) in the `docs` folder.
+
 __Button 1__
 - _1 Push_: The Stepper Motor...
   - Moves clockwise when temperature increases.
