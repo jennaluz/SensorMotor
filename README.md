@@ -64,7 +64,23 @@ __Button 3__
   - Displays (oo) when not moving.
 
 __NeoPixel__
-- _Pixel 1_ (topmost):
-- _Pixel 2_:
-- _Pixel 3_:
-- _Pixel 4_ (bottommost):
+- _Pixel 1_ (topmost): Reflects temperature. Displays...
+  - _Bright red_ when temperature is increasing.
+  - _Dim read_ when temperature is decreasing.
+- _Pixel 2_: Reflects humidity. Displays...
+  - _Bright yellow_ when temperature is increasing.
+  - _Dim yellow_ when temperature is decreasing.
+- _Pixel 3_: Reflects the status of the 7 Segment Display. Displays...
+  - _Red_ when showing the current temperature.
+  - _Yellow_ when showing the current humidity.
+  - _Purple_ when showing the Stepper Motor status.
+- _Pixel 4_ (bottommost): Reflects the status of the Stepper Motor. Displays...
+  - _Green_ when moving clockwise.
+  - _Yellow_ when moving counterclockwise.
+  - _Orange_ when not moving.
+  
+__Error Messages__
+The 7 Segment Display shows error messages. Displays...
+- (三三) with _Unknown Input_.
+- (OF) when the Display Queue _Overflows_.
+- (EE) when the _Emergency Stop_ mechanism is triggered.
